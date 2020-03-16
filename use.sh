@@ -1,9 +1,9 @@
 #!/bin/bash
 OLDWORKDIR="$(pwd)"
-BASE="$(dirname $0)"
-FULLPATH="$(realpath $BASE)"
-IGNORE="use.sh README.md"
-cd "$BASE"
+BASE="$(dirname "$0")"
+FULLPATH="$(realpath "$BASE")"
+IGNORE="use.sh README.md .gitignore backup"
+cd "$BASE" || exit 1
 
 backup_one() {
     echo "Moving ~/.$1 to backup/$1"
@@ -12,16 +12,17 @@ backup_one() {
 }
 
 do_link() {
-    if [ -e "$HOME/.$1" ]
+    # Possible broken link
+    if [ -e "$HOME/.$1" ] || [ -L "$HOME/.$1" ]
     then
         echo "~/.$1 exists, overwrite? [y/n]"
         read -r tf
         if [ "$tf" = "y" ]
         then
-            backup_one $1
+            backup_one "$1"
         else
-            echo "Not overriding"
-            continue
+            echo "Not overwriting"
+            return
         fi
     fi
     ln -s "$FULLPATH/$1" "$HOME/.$1"
@@ -40,7 +41,7 @@ included() {
 
 for i in *
 do
-    if included $i
+    if included "$i"
     then
         do_link $i
     fi
