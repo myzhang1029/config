@@ -1,0 +1,100 @@
+#!/bin/sh
+# Aliases
+# Prepare variables
+ADMIN_USER="${ADMIN_USER-$USER}"
+
+# General aliases
+## listing
+# List commands overriding ohmyz
+# status: 0: GNU ls; 1: BSD ls
+if ls --help > /dev/null 2>&1
+then
+    # GNU ls
+    alias la='ls -A'
+    alias ll='ls -lh'
+    alias l='ls -lAh'
+else
+    # BSD ls
+    alias ls="ls -G"
+    alias la="ls -GA"
+    alias ll="ls -Glh"
+    alias l="ls -GlAh"
+fi
+
+## other utils
+alias du='du -Ph'
+alias df='df -h'
+### do something as the admin
+alias suy="sudo '-EHu${ADMIN_USER}'"
+### shredded revoval
+alias srm="shred -fuvxzn100"
+### clear with clear delimeter
+alias clear="for i in {0..100000};do printf 1;done;echo;for i in {0..100000};do printf ' ';done;echo;command clear"
+### recursive download
+alias rwget="command wget -cbrxp -np -U 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15'"
+### search command history
+alias ghis='history|grep'
+### session history
+alias lochist="fc -lLI 1"
+### cp with progress
+if which rsync >/dev/null 2>&1
+then
+    alias pcp="rsync -arP"
+else
+    alias pcp="cp -r"
+fi
+### aria2c for wget
+if which aria2c >/dev/null 2>&1
+then
+    alias wget="aria2c -x16"
+fi
+
+# Python
+alias python='python3'
+alias pip='pip3'
+alias ipy='ipython'
+
+# Homebrew
+alias brew="sudo '-EHu${ADMIN_USER}' brew"
+## install
+alias binst="sudo '-EHu${ADMIN_USER}' brew install"
+## uninstall
+alias bunins="sudo '-EHu${ADMIN_USER}' brew uninstall"
+
+# Git plugin
+## discard commit history (dangerous)
+alias ggh="git checkout --orphan newBranch && git commit -a && git branch -D master && git branch -m master"
+## push all refs to all remotes
+alias gpa='for i in `git remote`;do git push $i;git push --tags $i;done'
+
+alias resolve="dns-sd -G v4v6"
+
+# macOS
+## remove the "unsafe" notice of an app
+alias enableapp="sudo xattr -d com.apple.quarantine"
+
+# Zsh -s aliases
+if [ "$(basename $0)" = "zsh" ]
+then
+    if which unar >/dev/null 2>&1
+    then
+        alias -s gz="unar"
+        alias -s tgz="unar"
+        alias -s tar="unar"
+        alias -s xz="unar"
+        alias -s bz2="unar"
+        alias -s Z="unar"
+        alias -s zip="unar"
+    else
+        alias -s gz="gunzip"
+        alias -s tgz="tar -zxvf"
+        alias -s tar="tar -xvf"
+        alias -s xz="unxz"
+        alias -s bz2="bunzip2"
+        alias -s Z="uncompress"
+        alias -s zip="unzip"
+    fi
+fi
+
+# Load other system-local aliases
+[ -f ~/.local_aliases ] && . ~/.local_aliases
