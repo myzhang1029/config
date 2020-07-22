@@ -1,9 +1,52 @@
 # This is Git's per-user configuration file.
+
 [user]
 	email = myzhang1029@hotmail.com
 	signingkey = 8FE14A7CD7828CE96046612EC045CA1124D12D67
 	name = Zhang Maiyun
+
 [help]
 	autoCorrect = 10
+
 [commit]
 	gpgsign = true
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[commit]
+	# Show diff when preparing commit message
+	verbose = true
+
+
+[alias]
+	a = add
+	aa = add --all
+	b = branch
+	c = commit
+    cl = clone --recurse-submodules
+	co = checkout
+	d = diff
+	re = remote
+	st = status
+
+[http "https://repo.or.cz"]
+	sslCert = /Users/zmy/.repo.or.cz.push.pem
+	sslKey = /Users/zmy/.ssh/id_rsa
+
+[http]
+	sslKey = /Users/zmy/.ssh/id_ed25519
+
+[pull]
+	rebase = false
+
+[filter "lfs"]
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+
+# Include local overrides
+[include]
+	path = .gitconfig.local
