@@ -62,6 +62,7 @@ alias binst="sudo '-EHu${ADMIN_USER}' brew install"
 alias bunins="sudo '-EHu${ADMIN_USER}' brew uninstall"
 
 # Git plugin
+alias g="git"
 ## discard commit history (dangerous)
 alias ggh="git checkout --orphan newBranch && git commit -a && git branch -D master && git branch -m master"
 ## push all refs to all remotes
