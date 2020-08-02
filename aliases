@@ -74,7 +74,7 @@ alias resolve="dns-sd -G v4v6"
 alias enableapp="sudo xattr -d com.apple.quarantine"
 
 # Zsh -s aliases
-if [ "$(basename $0)" = "zsh" ]
+if [ "$(basename -- "$0")" = "zsh" ]
 then
     if which unar >/dev/null 2>&1
     then
