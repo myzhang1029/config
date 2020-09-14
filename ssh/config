@@ -1,11 +1,7 @@
 Host *.git*.com
-    ControlMaster auto
-    ControlPath ~/.ssh/conn-%r@%h:%p
     ControlPersist 120s
 
 Host e.coding.net
-    ControlMaster auto
-    ControlPath ~/.ssh/conn-%r@%h:%p
     ControlPersist 120s
     IdentityFile ~/.ssh/id_rsa
 
