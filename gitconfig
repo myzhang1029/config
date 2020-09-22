@@ -33,6 +33,7 @@
     lg = log --decorate --oneline --graph
     p = push
     re = remote
+    rv = remote -v
     st = status
 
 [http "https://repo.or.cz"]
