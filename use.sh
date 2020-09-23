@@ -3,7 +3,8 @@
 OLDWORKDIR="$(pwd)"
 BASE="$(dirname "$0")"
 FULLPATH="$(realpath "$BASE")"
-IGNORE="use.sh README.md .gitignore backup"
+IGNORE="use.sh auto_install.sh README.md .gitignore backup additional_scripts"
+INSTALLED=""
 
 cd "$BASE" || exit 1
 
@@ -11,7 +12,7 @@ cd "$BASE" || exit 1
 # @param 1 name or path of the file to back up.
 backup_one() {
     echo "Moving ~/.$1 to backup/$1"
-    mkdir -p "$OLDWORKDIR/backup/$(dirname $1)"
+    mkdir -p "$OLDWORKDIR/backup/$(dirname "$1")"
     mv "$HOME/.$1" "$OLDWORKDIR/backup/$1"
 }
 
@@ -21,6 +22,7 @@ do_link() {
     # Possible broken link
     if [ -e "$HOME/.$1" ] || [ -L "$HOME/.$1" ]
     then
+        # shellcheck disable=SC2088
         echo "~/.$1 exists, overwrite? [y/n]"
         read -r tf
         if [ "$tf" = "y" ]
@@ -32,6 +34,7 @@ do_link() {
         fi
     fi
     ln -s "$FULLPATH/$1" "$HOME/.$1"
+    INSTALLED="$INSTALLED"$'\n'"$1"
 }
 
 # Check if a file should be linked.
@@ -51,7 +54,7 @@ included() {
 # @param 1 name or path of the folder.
 link_folder() {
     mkdir -p "$HOME/.$1"
-    for d in $1/*
+    for d in "$1"/*
     do
         if [ -d "$d" ]
         then
@@ -73,4 +76,11 @@ do
             do_link "$i"
         fi
     fi
+done
+echo "Linked these files:"
+echo "$INSTALLED"
+for script in additional_scripts/*
+do
+    echo "Running $script"
+    $script
 done
