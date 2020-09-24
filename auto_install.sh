@@ -1,19 +1,21 @@
 #!/bin/sh -e
+# wget -O- https://git.io/JU2Vz | sh
 # download and pipe this script to sh to use the config!
 
 # Attempt to install package $1.
 attempt_install()
 {
+    SUDO="$(command -v sudo&&echo sudo)"
     for prog in apt-get dnf yum
     do
         if command -v "$prog" >/dev/null 2>&1
         then
-            sudo "$prog" -y install "$1" && return 0
+            "$SUDO" "$prog" -y install "$1" && return 0
         fi
     done
     if command -v pacman >/dev/null 2>&1
     then
-        yes | sudo pacman -S "$1" && return 0
+        yes | "$SUDO" pacman -S "$1" && return 0
     fi
     return 1
 }
