@@ -3,7 +3,7 @@
 # Attempt to install packages $1.
 attempt_install()
 {
-    SUDO="$(command -v sudo&&echo sudo)"
+    SUDO="$(command -v sudo&&echo sudo||echo command)"
     for prog in apt-get dnf yum
     do
         if command -v "$prog" >/dev/null 2>&1
