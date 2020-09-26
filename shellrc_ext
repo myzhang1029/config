@@ -3,6 +3,7 @@
 ADMIN_USER="${ADMIN_USER-$USER}"
 export PAGER="less"
 export EDITOR="vim"
+export PATH="$HOME/.local/bin:$PATH"
 
 # Aliases
 ## General aliases
