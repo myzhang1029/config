@@ -102,5 +102,29 @@ then
         alias -s Z="uncompress"
         alias -s zip="unzip"
     fi
+else
+    # Not zsh
+    if [ "$PS1" ]
+    then
+        # Save history
+        export PROMPT_COMMAND='history -a'
+        # Use bash-completion, if available
+        [ -f /usr/share/bash-completion/bash_completion ] && \
+                . /usr/share/bash-completion/bash_completion
+        # PS1 tricks from CS50 IDE
+        cwdSlashAtEnd ()
+        {
+            TITLE="$(dirs +0)"
+            if [ -z "$1" ]
+            then
+                TITLE="${TITLE%/}"
+            else
+                TITLE="${TITLE##*/}"
+            fi
+            echo -n "${TITLE}/"
+        }
+        # Prompt
+        PS1='\[$'\x0f'\033[01;34m\]$(cwdSlashAtEnd)\[\033[00m\]$(__git_ps1 " (%s)") $ '
+    fi
 fi
 
