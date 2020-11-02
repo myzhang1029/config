@@ -22,4 +22,4 @@ attempt_install()
     return 1
 }
 
-attempt_install "neovim ctags aria2"
+attempt_install "neovim ctags aria2 bash-completion"
