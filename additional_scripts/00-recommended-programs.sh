@@ -10,7 +10,7 @@ attempt_install()
         then
             # $1 not quoted for performance
             # shellcheck disable=SC2086
-            $SUDO"" "$prog" -y install $1 && return 0
+            "$SUDO" "$prog" -y install $1 && return 0
         fi
     done
     if command -v pacman >/dev/null 2>&1
