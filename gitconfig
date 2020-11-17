@@ -26,14 +26,17 @@
     b = branch
     c = commit --verbose
     cl = clone --recurse-submodules
+    cln = clean -xdf
     co = checkout
     d = diff
     f = fetch
+    gh = git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D master && git branch -m master
     l = pull
     lo = log
     lg = log --decorate --oneline --graph
     m = merge
     p = push
+    pa = "!git remote | xargs -L1 -I % echo \"git push --all %; git push --tags %\" | sh"
     re = remote
     rv = remote -v
     st = status
