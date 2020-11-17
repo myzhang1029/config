@@ -45,11 +45,7 @@
     smu = submodule update
 
 [http "https://repo.or.cz"]
-    sslCert = /Users/zmy/.repo.or.cz.push.pem
-    sslKey = /Users/zmy/.ssh/id_rsa
-
-[http]
-    sslKey = /Users/zmy/.ssh/id_ed25519
+    sslCert = ~/.repo.or.cz.push.pem
 
 [pull]
     rebase = false
