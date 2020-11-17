@@ -28,7 +28,7 @@ fi
 alias du='du -Ph'
 alias df='df -h'
 #### do something as the admin
-alias suy="sudo '-EHu${ADMIN_USER}'"
+alias suy='sudo "-EHu${ADMIN_USER}"'
 #### shredded revoval
 alias srm="shred -fuvxzn100"
 #### clear with clear delimeter
@@ -58,18 +58,14 @@ alias pip='pip3'
 alias ipy='ipython'
 
 ## Homebrew
-alias brew="sudo '-EHu${ADMIN_USER}' brew"
+alias brew='sudo "-EHu${ADMIN_USER}" brew'
 ### install
-alias binst="sudo '-EHu${ADMIN_USER}' brew install"
+alias binst='sudo "-EHu${ADMIN_USER}" brew install'
 ### uninstall
-alias bunins="sudo '-EHu${ADMIN_USER}' brew uninstall"
+alias bunins='sudo "-EHu${ADMIN_USER}" brew uninstall"'
 
 ## Git plugin
 alias g="git"
-### discard commit history (dangerous)
-alias ggh="git checkout --orphan newBranch && git commit -a && git branch -D master && git branch -m master"
-### push all refs to all remotes
-alias gpa='for i in `git remote`;do git push $i;git push --tags $i;done'
 
 ## DNS
 alias resolve="dns-sd -G v4v6"
@@ -81,9 +77,11 @@ alias enableapp="sudo xattr -d com.apple.quarantine"
 ## Load other system-local aliases
 [ -f ~/.local_aliases ] && . ~/.local_aliases
 
-# Zsh -s aliases
-if [ "$(basename -- "$0")" = "zsh" ]
+if ! [ "$ZSH_VERSION" = "" ]
 then
+    # Reset terminal options
+    precmd() { tput sgr0; printf "\x0f"; }
+    # Zsh -s aliases
     if which unar >/dev/null 2>&1
     then
         alias -s gz="unar"
@@ -106,25 +104,17 @@ else
     # Not zsh
     if [ "$PS1" ]
     then
-        # Save history
-        export PROMPT_COMMAND='history -a'
+        # Save history and reset terminal options
+        PROMPT_COMMAND='history -a; tput sgr0; printf "\x0f"'
         # Use bash-completion, if available
-        [ -f /usr/share/bash-completion/bash_completion ] && \
+        if [ -f /usr/share/bash-completion/bash_completion ]
+        then
                 . /usr/share/bash-completion/bash_completion
-        # PS1 tricks from CS50 IDE
-        cwdSlashAtEnd ()
-        {
-            TITLE="$(dirs +0)"
-            if [ -z "$1" ]
-            then
-                TITLE="${TITLE%/}"
-            else
-                TITLE="${TITLE##*/}"
-            fi
-            echo -n "${TITLE}/"
-        }
-        # Prompt
-        PS1='\[$'\x0f'\033[01;34m\]$(cwdSlashAtEnd)\[\033[00m\]$(__git_ps1 " (%s)") $ '
+            # Prompt
+            PS1='\[\033[01;34m\]\W\[\033[00m\]$(__git_ps1 " (%s)") $ '
+        else
+            PS1='\[\033[01;34m\]\W\[\033[00m\] $ '
+        fi
     fi
 fi
 
