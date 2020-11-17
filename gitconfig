@@ -28,13 +28,21 @@
     cl = clone --recurse-submodules
     co = checkout
     d = diff
+    f = fetch
     l = pull
     lo = log
     lg = log --decorate --oneline --graph
+    m = merge
     p = push
     re = remote
     rv = remote -v
     st = status
+    sta = stash
+    stp = stash pop
+    sm = submodule
+    smf = submodule foreach
+    sms = submodule sync
+    smu = submodule update
 
 [http "https://repo.or.cz"]
     sslCert = /Users/zmy/.repo.or.cz.push.pem
