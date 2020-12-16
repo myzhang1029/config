@@ -22,4 +22,10 @@ attempt_install()
     return 1
 }
 
-attempt_install "neovim ctags aria2 bash-completion"
+attempt_install neovim
+attempt_install python3
+attempt_install python3-pip
+attempt_install ctags
+attempt_install exuberant-ctags
+aria2
+bash-completion

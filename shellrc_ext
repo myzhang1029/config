@@ -2,7 +2,18 @@
 # Variables
 ADMIN_USER="${ADMIN_USER-$USER}"
 export PAGER="less"
-export EDITOR="vim"
+
+## Select an editor and set $EDITOR
+for editor in nvim vim nanovi emacs
+do
+    if type "$editor" >/dev/null 2>&1
+    then
+        EDITOR="$editor"
+        break
+    fi
+done
+export EDITOR
+
 export PATH="$HOME/.local/bin:$PATH"
 
 # Aliases
@@ -13,6 +24,7 @@ export PATH="$HOME/.local/bin:$PATH"
 if ls --help > /dev/null 2>&1
 then
     # GNU ls
+    alias ls='ls --color'
     alias la='ls -A'
     alias ll='ls -lh'
     alias l='ls -lAh'
@@ -32,22 +44,33 @@ alias suy='sudo "-EHu${ADMIN_USER}"'
 #### shredded revoval
 alias srm="shred -fuvxzn100"
 #### clear with clear delimeter
-alias clear="for i in {0..100000};do printf 1;done;echo;for i in {0..100000};do printf ' ';done;echo;command clear"
+clear()
+{
+    for i in {0..10000}
+    do
+        printf 1
+    done
+    echo
+    for i in {0..10000}
+    do
+        printf ' '
+    done
+    echo
+    command clear
+}
 #### recursive download
 alias rwget="command wget -cbrxp -np -U 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15'"
 #### search command history
 alias ghis='history|grep'
-#### session history
-alias lochist="fc -lLI 1"
 #### cp with progress
-if which rsync >/dev/null 2>&1
+if type rsync >/dev/null 2>&1
 then
     alias pcp="rsync -arP"
 else
     alias pcp="cp -r"
 fi
 #### aria2c for wget
-if which aria2c >/dev/null 2>&1
+if type aria2c >/dev/null 2>&1
 then
     alias wget="aria2c -x16"
 fi
@@ -79,10 +102,12 @@ alias enableapp="sudo xattr -d com.apple.quarantine"
 
 if ! [ "$ZSH_VERSION" = "" ]
 then
+    # Session history
+    alias lochist="fc -lLI 1"
     # Reset terminal options
     precmd() { tput sgr0; printf "\x0f"; }
     # Zsh -s aliases
-    if which unar >/dev/null 2>&1
+    if type unar >/dev/null 2>&1
     then
         alias -s gz="unar"
         alias -s tgz="unar"
