@@ -14,7 +14,7 @@ do
 done
 export EDITOR
 
-export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:/usr/lib/ccache/bin:$PATH"
 
 # Aliases
 ## General aliases
@@ -57,6 +57,16 @@ clear()
     done
     echo
     command clear
+}
+#### find files in $1 larger than $2
+findlarger()
+{
+    sudo find "$1" -xdev -type f -size "+$2"
+}
+#### find files in $1 that are largest $2
+findlargest()
+{
+    sudo du -ahx "$1" 2>/dev/null | sort -rh | head "-$2"
 }
 #### recursive download
 alias rwget="command wget -cbrxp -np -U 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15'"
