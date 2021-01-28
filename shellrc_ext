@@ -95,7 +95,7 @@ alias brew='sudo "-EHu${ADMIN_USER}" brew'
 ### install
 alias binst='sudo "-EHu${ADMIN_USER}" brew install'
 ### uninstall
-alias bunins='sudo "-EHu${ADMIN_USER}" brew uninstall"'
+alias bunins='sudo "-EHu${ADMIN_USER}" brew uninstall'
 
 ## Git plugin
 alias g="git"
