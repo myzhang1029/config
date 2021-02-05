@@ -32,16 +32,8 @@ getbranch()
 ## Clear with clear delimeter
 clear()
 {
-    for i in {0..10000}
-    do
-        printf 1
-    done
-    echo
-    for i in {0..10000}
-    do
-        printf ' '
-    done
-    echo
+    printf '%*s\n' 10000 '' | tr ' ' "#"
+    printf '%*s\n' 10000 ''
     command clear
 }
 
