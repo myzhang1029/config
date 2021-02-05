@@ -23,15 +23,6 @@ set -o vi
 
 
 # Functions
-## Getthe PID with a process name
-getpid()
-{
-    local out="$(ps -ef | grep -v grep)"
-	echo "$out" | grep "$1"
-	echo PIDs:
-	echo "$out" | grep "$1" | awk '{print $2}'
-}
-
 ## Fetch a git branch
 getbranch()
 {
@@ -63,7 +54,7 @@ findlarger()
 ## Find files in $1 that are largest $2
 findlargest()
 {
-    sudo du -ahx "$1" 2>/dev/null | sort -rh | head "-$2"
+    sudo "du" -ahx "$1" 2>/dev/null | sort -rh | head "-$2"
 }
 
 
