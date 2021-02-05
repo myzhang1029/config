@@ -72,7 +72,7 @@ findlargest()
 ### Listing
 #### List commands overriding ohmyz
 #### status: 0: GNU ls; 1: BSD ls
-if ls --help > /dev/null 2>&1
+if ls --help >/dev/null 2>&1
 then
     # GNU ls
     alias ls='ls --color'
@@ -164,14 +164,17 @@ then
     fi
 else
     # Not zsh
+    # Use bash-completion, if available
+    if [ -f /usr/share/bash-completion/bash_completion ]
+    then
+            . /usr/share/bash-completion/bash_completion
+    fi
     if [ "$PS1" ]
     then
         # Save history and reset terminal options
         PROMPT_COMMAND='history -a; tput sgr0; printf "\x0f"'
-        # Use bash-completion, if available
-        if [ -f /usr/share/bash-completion/bash_completion ]
+        if type __git_ps1 >/dev/null 2>&1
         then
-                . /usr/share/bash-completion/bash_completion
             # Prompt
             PS1='\[\033[01;34m\]\W\[\033[00m\]$(__git_ps1 " (%s)") $ '
         else
