@@ -2,7 +2,18 @@
 
 OLDWORKDIR="$(pwd)"
 BASE="$(dirname "$0")"
-FULLPATH="$(realpath "$BASE")"
+if type realpath >/dev/null 2>&1
+then
+    FULLPATH="$(realpath "$BASE")"
+else
+    # realpath not available
+    case "$BASE" in
+        # Full path supplied in $0
+        /*) FULLPATH="$BASE";;
+        # Relative path supplied in $0
+        *) FULLPATH="$(pwd -P)/$BASE";;
+    esac
+fi
 IGNORE="use.sh auto_install.sh README.md .gitignore backup additional_scripts"
 INSTALLED=""
 
