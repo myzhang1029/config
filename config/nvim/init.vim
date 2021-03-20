@@ -25,3 +25,31 @@ augroup resCur
     autocmd BufReadPost * call setpos(".", getpos("'\""))
 augroup END
 
+" Plugins
+if has('nvim')
+    call plug#begin('~/.config/nvim/plugged')
+else
+    call plug#begin('~/.vim/plugged')
+endif
+
+" Tags Navigation
+Plug 'vim-scripts/taglist.vim'
+
+" Diff changed
+Plug 'vim-scripts/diffchanges.vim'
+
+" TOML
+Plug 'cespare/vim-toml'
+
+" Swift
+Plug 'keith/swift.vim'
+Plug 'arzg/vim-swift'
+
+" OpenCL
+Plug 'petRUShka/vim-opencl'
+
+call plug#end()
+
+" Shorter version
+command! Diff execute 'DiffChangesDiffToggle'
+
