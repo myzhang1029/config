@@ -90,7 +90,7 @@ do
 done
 echo "Linked these files:"
 echo "$INSTALLED"
-for script in additional_scripts/*
+for script in additional_scripts/*.sh
 do
     echo "Running $script"
     $script

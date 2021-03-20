@@ -5,7 +5,10 @@
 INSTALL_DEST="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload
 
 mkdir -p "${INSTALL_DEST}"
+# First make sure at least the bundled version can be used as fallback
+cp "$(dirname "$0")"/plug.vim "${INSTALL_DEST}/plug.vim"
 
+# The try to get newer versions
 if type curl > /dev/null 2>&1
 then
     curl -fLo "${INSTALL_DEST}/plug.vim" \
@@ -14,9 +17,6 @@ elif type wget > /dev/null 2>&1
 then
     wget -O "${INSTALL_DEST}/plug.vim" \
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-else
-    echo "WARNING: Unable to install vim-plug" >&2
-    exit 1
 fi
 
 # Install for vim
