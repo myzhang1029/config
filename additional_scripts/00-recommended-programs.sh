@@ -8,16 +8,12 @@ attempt_install()
     do
         if command -v "$prog" >/dev/null 2>&1
         then
-            # $1 not quoted for performance
-            # shellcheck disable=SC2086
-            "$SUDO" "$prog" -y install $1 && return 0
+            "$SUDO" "$prog" -y install "$1" && return 0
         fi
     done
     if command -v pacman >/dev/null 2>&1
     then
-        # $1 not quoted for performance
-        # shellcheck disable=SC2086
-        yes | "$SUDO" pacman -S $1 && return 0
+        yes | "$SUDO" pacman -S --needed "$1" && return 0
     fi
     return 1
 }
@@ -27,5 +23,5 @@ attempt_install python3
 attempt_install python3-pip
 attempt_install ctags
 attempt_install exuberant-ctags
-aria2
-bash-completion
+attempt_install aria2
+attempt_install bash-completion

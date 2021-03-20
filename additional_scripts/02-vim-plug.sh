@@ -26,5 +26,6 @@ mkdir -p ~/.vim/autoload
 ln -s "${INSTALL_DEST}/plug.vim" ~/.vim/autoload/plug.vim
 
 # Make sure plugins are loaded
-[ type nvim > /dev/null 2>&1 ] && nvim -c ':PlugInstall | qall'
-[ type vim > /dev/null 2>&1 ] && vim -c ':PlugInstall | qall'
+type nvim > /dev/null 2>&1 && nvim -c ':PlugInstall | qall' > /dev/null < /dev/null
+# neovim handles non-tty inputs well but vim does not
+type vim > /dev/null 2>&1 && vim -c ':PlugInstall | qall' > /dev/tty < /dev/tty
