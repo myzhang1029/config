@@ -30,7 +30,7 @@
     co = checkout
     d = diff
     f = fetch
-    gh = git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D master && git branch -m master
+    gh = git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main
     l = pull
     lo = log
     lg = log --decorate --oneline --graph
