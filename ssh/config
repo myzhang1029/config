@@ -14,4 +14,3 @@ Host *
     ServerAliveInterval 30
     ServerAliveCountMax 120
     IdentityFile ~/.ssh/id_ed25519
-

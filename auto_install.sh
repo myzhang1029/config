@@ -1,6 +1,6 @@
 #!/bin/sh -e
-# wget -O- https://git.io/JU2Vz | sh
-# download and pipe this script to sh to use the config!
+# sh -c "$(wget -O- https://git.io/JU2Vz)" DIRECTORY REMOTE-URL
+# Download and pipe this script to sh to use this configuration!
 
 # Attempt to install package $1.
 attempt_install()
@@ -32,13 +32,21 @@ check_cmd()
 
 check_cmd git
 
-# Use HTTPS URLs to ensure this works on all machines
-git clone https://github.com/myzhang1029/config.git config
-cd config
-./use.sh
-
-# Change remote URL if asked to
+TARGET_PATH="config"
+# Use another directory path if specified
 if [ "$#" -gt 0 ]
 then
-    git remote set-url origin "$1"
+    TARGET_PATH="$1"
 fi
+
+# Use HTTPS URLs to ensure this works on all machines
+git clone https://github.com/myzhang1029/config.git "$TARGET_PATH"
+cd "$TARGET_PATH"
+
+# Change remote URL if asked to
+if [ "$#" -gt 1 ]
+then
+    git remote set-url origin "$2"
+fi
+
+./use.sh

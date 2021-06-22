@@ -48,6 +48,9 @@ Plug 'arzg/vim-swift'
 " OpenCL
 Plug 'petRUShka/vim-opencl'
 
+" ARM assembler
+Plug 'ARM9/arm-syntax-vim'
+
 call plug#end()
 
 " Shorter version
