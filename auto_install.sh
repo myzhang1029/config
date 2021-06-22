@@ -1,5 +1,5 @@
 #!/bin/sh -e
-# sh -c "$(wget -O- https://git.io/JU2Vz)" DIRECTORY REMOTE-URL
+# sh -c "$(wget -O- https://git.io/ZMYcfg)" DIRECTORY REMOTE-URL
 # Download and pipe this script to sh to use this configuration!
 
 # Attempt to install package $1.
