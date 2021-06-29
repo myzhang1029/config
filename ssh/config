@@ -9,7 +9,6 @@ Host *
     ControlMaster auto
     ControlPath ~/.ssh/conn-%r@%h:%p
     ControlPersist 4h
-    ForwardAgent yes
     Compression yes
     ServerAliveInterval 30
     ServerAliveCountMax 120
