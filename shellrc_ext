@@ -49,6 +49,12 @@ findlargest()
     sudo "du" -ahx "$1" 2>/dev/null | sort -rh | head "-$2"
 }
 
+## Do something until it succeeds
+tryagain()
+{
+    while ! "$@"; do :; done
+}
+
 
 # Aliases
 ## General aliases
