@@ -68,6 +68,7 @@
 
 [core]
 	whitespace = trailing-space,space-before-tab
+	excludesfile = ~/.gitignore
 
 [apply]
 	whitespace = fix
