@@ -56,3 +56,8 @@ call plug#end()
 " Shorter version
 command! Diff execute 'DiffChangesDiffToggle'
 
+" Mappings
+" Emacs-style Ctrl-A to cure muscle memory
+map <C-A> 0
+" Let Ctrl-S do the job
+noremap <C-S> <C-A>
