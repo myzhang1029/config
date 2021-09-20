@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 OLDWORKDIR="$(pwd)"
 BASE="$(dirname "$0")"
@@ -30,10 +30,15 @@ backup_one() {
 # Link a file to $HOME.
 # @param 1 name or path of the file to link.
 do_link() {
+    # If it is already linked to this file, we do nothing
+    if [ "$(readlink "$HOME/.$1" 2> /dev/null)" = "$PWD/$1" ]
+    then
+        return 0
+    fi
     # Possible broken link
     if [ -e "$HOME/.$1" ] || [ -L "$HOME/.$1" ]
     then
-        # shellcheck disable=SC2088
+        # shellcheck disable=SC2088 # ~ is intended not to be expanded
         echo "~/.$1 exists, overwrite? [y/n]"
         read -r tf
         if [ "$tf" = "y" ]
@@ -45,7 +50,7 @@ do_link() {
         fi
     fi
     ln -s "$FULLPATH/$1" "$HOME/.$1"
-    INSTALLED="$INSTALLED"$'\n'"$1"
+    INSTALLED="$INSTALLED$1\n"
 }
 
 # Check if a file should be linked.
@@ -88,8 +93,11 @@ do
         fi
     fi
 done
+
 echo "Linked these files:"
-echo "$INSTALLED"
+# shellcheck disable=SC2059 # We want to intepret '\n'
+printf "$INSTALLED\n"
+
 for script in additional_scripts/*.sh
 do
     echo "Running $script"
