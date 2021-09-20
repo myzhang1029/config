@@ -1,0 +1,10 @@
+# Options
+set bell-style visible
+set completion-ignore-case on
+set editing-mode vi
+set match-hidden-files off
+set show-all-if-ambiguous on
+
+# Bindings
+"\C-a":beginning-of-line
+"\C-e":end-of-line

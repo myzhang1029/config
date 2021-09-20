@@ -24,9 +24,7 @@ if ! [ "$ZSH_VERSION" = "" ]
 then
     bindkey "^A" beginning-of-line
     bindkey "^E" end-of-line
-else
-    bind "\C-a":beginning-of-line
-    bind "\C-e":end-of-line
+# else set in .inputrc
 fi
 
 
@@ -150,6 +148,7 @@ alias resolve="dns-sd -G v4v6"
 alias enableapp="sudo xattr -d com.apple.quarantine"
 
 ## Load other system-local aliases
+# shellcheck source=/dev/null
 [ -f ~/.local_aliases ] && . ~/.local_aliases
 
 
@@ -187,15 +186,30 @@ else
     fi
     if [ "$PS1" ]
     then
+        # oh-my-zsh robbyrussell theme-like prompt
+        __bash_prompt_git()
+        {
+        	GIT_OPTIONAL_LOCKS=0 command git "$@"
+        }
+        
+        __bash_git_prompt_info()
+        {
+        	if ! __bash_prompt_git rev-parse --git-dir > /dev/null 2>&1 || \
+                [ "$(__bash_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" = "1" ]
+        	then
+        		return 0
+        	fi
+            # shellcheck disable=SC3043
+        	local _ref || true
+        	_ref=$(__bash_prompt_git symbolic-ref --short HEAD 2> /dev/null) || \
+                _ref=$(__bash_prompt_git rev-parse --short HEAD 2> /dev/null) || \
+                return 0
+        	printf " \e[1;34mgit:(\e[31m%s\e[34m)\e[0m" "$_ref"
+        }
+        
+        PS1='\[\e[1m\e[$(($?>0?31:32))m\]➜\[\e[0m\]  \[\e[1;36m\]\W\[\e[0m\]$(__bash_git_prompt_info) '
         # Save history and reset terminal options
         PROMPT_COMMAND='history -a; tput sgr0; printf "\x0f"'
-        if type __git_ps1 >/dev/null 2>&1
-        then
-            # Prompt
-            PS1='\[\033[01;34m\]\W\[\033[00m\]$(__git_ps1 " (%s)") $ '
-        else
-            PS1='\[\033[01;34m\]\W\[\033[00m\] $ '
-        fi
     fi
 fi
 
