@@ -204,7 +204,7 @@ else
         	_ref=$(__bash_prompt_git symbolic-ref --short HEAD 2> /dev/null) || \
                 _ref=$(__bash_prompt_git rev-parse --short HEAD 2> /dev/null) || \
                 return 0
-        	printf " \e[1;34mgit:(\e[31m%s\e[34m)\e[0m" "$_ref"
+            printf " \001\e[1;34m\002git:(\001\e[31m\002%s\001\e[34m\002)\001\e[0m\002" "$_ref"
         }
         
         PS1='\[\e[1m\e[$(($?>0?31:32))m\]➜\[\e[0m\]  \[\e[1;36m\]\W\[\e[0m\]$(__bash_git_prompt_info) '
