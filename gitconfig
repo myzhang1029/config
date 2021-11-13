@@ -30,13 +30,14 @@
     co = checkout
     d = diff
     f = fetch
-    gh = git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main
+    gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main"
     l = pull
     lo = log
     lg = log --decorate --oneline --graph
     m = merge
     p = push
     pa = "!git remote | xargs -L1 -I % echo \"git push --all %; git push --tags %\" | sh"
+    pf = push --force-with-lease
     re = remote
     rv = remote -v
     st = status

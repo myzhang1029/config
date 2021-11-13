@@ -45,6 +45,9 @@ tags
 # Persistent undo
 [._]*.un~
 
+# Added - NeoVim things
+.nvimlog
+
 # Windows.gitignore
 # Windows thumbnail cache files
 Thumbs.db
