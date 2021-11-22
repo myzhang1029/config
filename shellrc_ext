@@ -27,6 +27,9 @@ then
 # else set in .inputrc
 fi
 
+# Fix gpg signing issue if ran as a subprocess
+export GPG_TTY="$(tty)"
+
 
 # Functions
 ## Fetch a git branch

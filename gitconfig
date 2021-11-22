@@ -28,6 +28,7 @@
     cl = clone --recurse-submodules
     cln = clean -xdf
     co = checkout
+    cp = cherry-pick
     d = diff
     f = fetch
     gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main"
