@@ -84,6 +84,28 @@ print("rm -r", *[
 ])'
 }
 
+## Arduino-CLI compile and upload
+carduino()
+{
+    fqbn=arduino:avr:uno
+    port=/dev/ttyACM0
+    while [ $# -gt 0 ]
+    do
+        if [ "$1" = "-b" ]
+        then
+            fqbn="$2"
+            shift
+        elif [ "$1" = "-p" ]
+        then
+            port="$2"
+            shift
+        fi
+        shift
+    done
+    arduino-cli compile --fqbn "$fqbn"
+    arduino-cli upload --fqbn "$fqbn" -p "$port"
+}
+
 # Aliases
 ## General aliases
 ### Listing
