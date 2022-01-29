@@ -2,12 +2,14 @@ syntax on
 filetype plugin indent on
 
 set autoread " Reload on change externally
-set nu       " Show line number
 set backspace=indent,eol,start " Enable backspace
 set encoding=utf8
-set mouse=ncv
-set ruler
 set hid
+set list " Highlight invisible characters
+set listchars=tab:▸\ ,eol:¬
+set mouse=ncv
+set nu       " Show line number
+set ruler
 
 command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 
