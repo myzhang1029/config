@@ -16,8 +16,9 @@ command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 " Don't mess up YAMLs
 autocmd FileType yaml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType yaml set indentkeys-=<:>
-" Use actual tab chars in Makefiles.
-autocmd FileType make set tabstop=8 shiftwidth=8 softtabstop=0 noexpandtab
+" Use actual tab chars in Makefiles and TSV.
+autocmd FileType make set noexpandtab
+autocmd BufEnter *.tsv set noexpandtab
 " For everything else, use a tab width of 4
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 

@@ -61,17 +61,16 @@
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
 
-# Include local overrides
-[include]
-    path = .gitconfig.local
-
 [init]
-	defaultBranch = main
+    defaultBranch = main
 
 [core]
-	whitespace = trailing-space,space-before-tab
-	excludesfile = ~/.gitignore
+    whitespace = trailing-space,space-before-tab
+    excludesfile = ~/.gitignore
 
 [apply]
-	whitespace = fix
+    whitespace = fix
 
+# Include local overrides
+[include]
+    path = ~/.gitconfig.local
