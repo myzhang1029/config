@@ -73,15 +73,12 @@ newmac()
 ## Zap any app with brew-createzap
 zapper()
 {
-    python -c '
-flist = '"$(brew createzap "$1" | sed '1s/^zap trash: //')"'
-print("rm -r", *[
-    "\"{}\""
-    .format(
-        __import__("pathlib").Path(x).expanduser().as_posix()
-    )
-    for x in (flist if isinstance(flist, list) else [flist])
-])'
+    echo "trash $(
+        brew createzap "$1" | sed 's/^zap trash: \[$//;
+        s/^\]$//;
+        s/,$//;
+        s,^ *"~/,"'"$HOME"'/,'|awk -v ORS=' ' 1
+    )"
 }
 
 ## Arduino-CLI compile and upload
@@ -104,6 +101,12 @@ carduino()
     done
     arduino-cli compile --fqbn "$fqbn"
     arduino-cli upload --fqbn "$fqbn" -p "$port"
+}
+
+## DNS over HTTPS resolver
+doh()
+{
+    curl -H "Accept: application/dns-json" "https://dns.nextdns.io/dohtest?name=$1&type=${2:-A}" | jq '.Answer'
 }
 
 # Aliases
