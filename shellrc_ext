@@ -27,6 +27,13 @@ then
 # else set in .inputrc
 fi
 
+# GPG for SSH
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
+
+fi
+
 # Fix gpg signing issue if ran as a subprocess
 export GPG_TTY="$(tty)"
 
@@ -205,6 +212,19 @@ then
         alias -s Z="uncompress"
         alias -s zip="unzip"
     fi
+
+    # pip zsh completion start
+    function _pip_completion {
+      local words cword
+      read -Ac words
+      read -cn cword
+      reply=( $( COMP_WORDS="$words[*]" \
+                 COMP_CWORD=$(( cword-1 )) \
+                 PIP_AUTO_COMPLETE=1 $words[1] 2>/dev/null ))
+    }
+    compctl -K _pip_completion pip3
+    # pip zsh completion end
+
 else
     # Not zsh
     # Use bash-completion, if available
@@ -239,5 +259,15 @@ else
         # Save history and reset terminal options
         PROMPT_COMMAND='history -a; tput sgr0; printf "\x0f"'
     fi
+
+    # pip bash completion start
+    _pip_completion()
+    {
+        COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                       COMP_CWORD=$COMP_CWORD \
+                       PIP_AUTO_COMPLETE=1 $1 2>/dev/null ) )
+    }
+    complete -o default -F _pip_completion pip3
+    # pip bash completion end
 fi
 
