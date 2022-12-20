@@ -54,6 +54,9 @@ Plug 'petRUShka/vim-opencl'
 " ARM assembler
 Plug 'ARM9/arm-syntax-vim'
 
+" GitHub copilot
+Plug 'github/copilot.vim'
+
 call plug#end()
 
 " Shorter version

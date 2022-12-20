@@ -1,3 +1,5 @@
+VerifyHostKeyDNS ask
+
 Host *.git*.com
     ControlPersist 120s
 

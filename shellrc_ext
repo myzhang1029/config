@@ -33,9 +33,11 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
 
 fi
+gpg-agent --daemon > /dev/null || true
 
 # Fix gpg signing issue if ran as a subprocess
-export GPG_TTY="$(tty)"
+GPG_TTY="$(tty)"
+export GPG_TTY
 
 
 # Functions
@@ -88,6 +90,12 @@ zapper()
     )"
 }
 
+## Update autoconf aux
+autoconf_aux()
+{
+    command wget -O- 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' > config.guess
+    command wget -O- 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' > config.sub
+}
 ## Arduino-CLI compile and upload
 carduino()
 {
@@ -115,6 +123,41 @@ doh()
 {
     curl -H "Accept: application/dns-json" "https://dns.nextdns.io/dohtest?name=$1&type=${2:-A}" | jq '.Answer'
 }
+
+## Commit Homebrew cask zap updates
+commit_zap()
+(
+    cd "$(brew --repository homebrew/cask)/Casks" || return
+    casks="$(git status -su | sed 's/ M \(.*\)\.rb/\1/')"
+
+    for cask in $casks
+    do
+        echo "$cask"
+        brew audit --cask --online "$cask"
+        brew style --fix "$cask"
+        brew cleanup --prune all
+        echo "Press enter to create the commit, or 's' to skip... "
+        read -r
+        if ! [ "v$REPLY" = "vs" ]
+        then
+            title="Update the zap stanza of $cask"
+            branch="zap-$cask"
+            git checkout -b "$branch"
+            git add "$cask".rb
+            git commit -sm "$title"
+            git push myzhang1029 "$branch"
+
+            gh pr create --title "$title" --body - --base "master" --web << 'EOF'
+- [x] The submission is for [a stable version](https://docs.brew.sh/Acceptable-Casks#stable-versions) \
+or [documented exception](https://docs.brew.sh/Acceptable-Casks#but-there-is-no-stable-version).
+- [x] `brew audit --cask --online <cask>` is error-free.
+- [x] `brew style --fix <cask>` reports no offenses.'
+EOF
+            # Go to the previous commit
+            git checkout HEAD^
+        fi
+    done
+)
 
 # Aliases
 ## General aliases
@@ -214,13 +257,16 @@ then
     fi
 
     # pip zsh completion start
-    function _pip_completion {
-      local words cword
-      read -Ac words
-      read -cn cword
-      reply=( $( COMP_WORDS="$words[*]" \
-                 COMP_CWORD=$(( cword-1 )) \
-                 PIP_AUTO_COMPLETE=1 $words[1] 2>/dev/null ))
+    _pip_completion()
+    {
+        # shellcheck disable=SC3043
+        local words cword
+        read -Ac words
+        read -cn cword
+        # shellcheck disable=SC3054,SC3030,SC2034
+        reply=( $( COMP_WORDS="${words[*]}" \
+                   COMP_CWORD=$(( cword-1 )) \
+                   PIP_AUTO_COMPLETE=1 ${words[1]} 2>/dev/null ))
     }
     compctl -K _pip_completion pip3
     # pip zsh completion end
@@ -237,19 +283,19 @@ else
         # oh-my-zsh robbyrussell theme-like prompt
         __bash_prompt_git()
         {
-        	GIT_OPTIONAL_LOCKS=0 command git "$@"
+           GIT_OPTIONAL_LOCKS=0 command git "$@"
         }
         
         __bash_git_prompt_info()
         {
-        	if ! __bash_prompt_git rev-parse --git-dir > /dev/null 2>&1 || \
+            if ! __bash_prompt_git rev-parse --git-dir > /dev/null 2>&1 || \
                 [ "$(__bash_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" = "1" ]
-        	then
-        		return 0
-        	fi
+            then
+                return 0
+            fi
             # shellcheck disable=SC3043
-        	local _ref || true
-        	_ref=$(__bash_prompt_git symbolic-ref --short HEAD 2> /dev/null) || \
+            local _ref || true
+            _ref=$(__bash_prompt_git symbolic-ref --short HEAD 2> /dev/null) || \
                 _ref=$(__bash_prompt_git rev-parse --short HEAD 2> /dev/null) || \
                 return 0
             printf " \001\e[1;34m\002git:(\001\e[31m\002%s\001\e[34m\002)\001\e[0m\002" "$_ref"
@@ -263,6 +309,7 @@ else
     # pip bash completion start
     _pip_completion()
     {
+        # shellcheck disable=SC3054,SC3030
         COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
                        COMP_CWORD=$COMP_CWORD \
                        PIP_AUTO_COMPLETE=1 $1 2>/dev/null ) )
