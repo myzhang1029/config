@@ -74,3 +74,5 @@
 # Include local overrides
 [include]
     path = ~/.gitconfig.local
+[push]
+	autoSetupRemote = true

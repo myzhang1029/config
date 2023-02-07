@@ -57,6 +57,9 @@ Plug 'ARM9/arm-syntax-vim'
 " GitHub copilot
 Plug 'github/copilot.vim'
 
+" Code time
+Plug 'wakatime/vim-wakatime'
+
 call plug#end()
 
 " Shorter version
