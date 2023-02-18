@@ -21,7 +21,5 @@ attempt_install()
 attempt_install neovim
 attempt_install python3
 attempt_install python3-pip
-attempt_install ctags
-attempt_install exuberant-ctags
 attempt_install aria2
 attempt_install bash-completion

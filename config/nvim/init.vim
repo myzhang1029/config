@@ -35,12 +35,6 @@ else
     call plug#begin('~/.vim/plugged')
 endif
 
-" Tags Navigation
-Plug 'vim-scripts/taglist.vim'
-
-" Diff changed
-Plug 'vim-scripts/diffchanges.vim'
-
 " TOML
 Plug 'cespare/vim-toml'
 
