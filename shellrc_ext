@@ -224,6 +224,7 @@ alias resolve="dns-sd -G v4v6"
 ## macOS
 ### remove the "unsafe" notice of an app
 alias enableapp="sudo xattr -d com.apple.quarantine"
+alias fflistdev="ffmpeg -hide_banner -f avfoundation -list_devices true -i ''"
 
 ## Load other system-local aliases
 # shellcheck source=/dev/null

@@ -55,11 +55,17 @@
 [pull]
     rebase = false
 
+[push]
+    autoSetupRemote = true
+
 [filter "lfs"]
     required = true
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
+
+[diff "json"]
+    textconv = jq --sort-keys .
 
 [init]
     defaultBranch = main
@@ -74,5 +80,3 @@
 # Include local overrides
 [include]
     path = ~/.gitconfig.local
-[push]
-	autoSetupRemote = true
