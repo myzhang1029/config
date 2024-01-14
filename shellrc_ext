@@ -124,37 +124,40 @@ doh()
     curl -H "Accept: application/dns-json" "https://dns.nextdns.io/dohtest?name=$1&type=${2:-A}" | jq '.Answer'
 }
 
-## Commit Homebrew cask zap updates
+## Commit Homebrew cask zap updates: does not work with zsh
 commit_zap()
 (
-    cd "$(brew --repository homebrew/cask)/Casks" || return
-    casks="$(git status -su | sed 's/ M \(.*\)\.rb/\1/')"
+    cd "$(brew --repository homebrew/cask)/Casks" || return 1
+    casks="$(git status -su | sed 's: M [a-zA-Z0-9]/\(.*\)\.rb:\1:' | xargs)"
 
     for cask in $casks
     do
-        echo "$cask"
-        brew audit --cask --online "$cask"
-        brew style --fix "$cask"
+        caskpath="${cask%${cask#?}}/${cask}.rb"
+        echo "$cask" at "$caskpath"
+        brew audit --cask --online "$cask" || echo "brew audit failed for $cask"
+        brew style --fix "$cask" || echo "brew style failed for $cask"
         brew cleanup --prune all
         echo "Press enter to create the commit, or 's' to skip... "
         read -r
         if ! [ "v$REPLY" = "vs" ]
         then
-            title="Update the zap stanza of $cask"
+            title="$cask: update zap stanza"
             branch="zap-$cask"
-            git checkout -b "$branch"
-            git add "$cask".rb
-            git commit -sm "$title"
-            git push myzhang1029 "$branch"
+            git switch -c "$branch" || return 1
+            git add "$caskpath" || return 1
+            git commit -sm "$title" || return 1
+            git push myzhang1029 "$branch" || return 1
 
-            gh pr create --title "$title" --body - --base "master" --web << 'EOF'
+            gh pr create --title "$title" --body-file - --base "homebrew:master" --head "myzhang1029:$branch" --web << 'EOF'
+After making any changes to a cask, existing or new, verify:
+
 - [x] The submission is for [a stable version](https://docs.brew.sh/Acceptable-Casks#stable-versions) \
 or [documented exception](https://docs.brew.sh/Acceptable-Casks#but-there-is-no-stable-version).
 - [x] `brew audit --cask --online <cask>` is error-free.
 - [x] `brew style --fix <cask>` reports no offenses.'
 EOF
             # Go to the previous commit
-            git checkout HEAD^
+            git switch -
         fi
     done
 )
