@@ -38,7 +38,7 @@
     m = merge
     p = push
     pa = "!git remote | xargs -L1 -I % echo \"git push --all %; git push --tags %\" | sh"
-    pf = push --force-with-lease
+    pf = push --force-with-lease --force-if-includes
     re = remote
     rv = remote -v
     st = status
@@ -48,6 +48,8 @@
     smf = submodule foreach
     sms = submodule sync
     smu = submodule update
+    sw = switch
+    swc = switch --create
 
 [http "https://repo.or.cz"]
     sslCert = ~/.repo.or.cz.push.pem
