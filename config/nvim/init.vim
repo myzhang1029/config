@@ -21,6 +21,8 @@ autocmd FileType make set noexpandtab
 autocmd BufEnter *.tsv set noexpandtab
 " For everything else, use a tab width of 4
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+" Line wrap in diff
+au VimEnter * if &diff | execute 'windo set wrap' | endif
 
 " Remember file position
 augroup resCur
