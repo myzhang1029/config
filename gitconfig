@@ -18,6 +18,7 @@
 [commit]
     # Show diff when preparing commit message
     verbose = true
+    cleanup = scissors
 
 
 [alias]
@@ -78,6 +79,13 @@
 
 [apply]
     whitespace = fix
+
+[sendemail]
+    smtpserver = mail.maiyun.me
+    smtpuser = me@maiyun.me
+    smtpencryption = tls
+    smtpserverport = 587
+    annotate = yes
 
 # Include local overrides
 [include]
