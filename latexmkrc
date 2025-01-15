@@ -1,5 +1,7 @@
-# Use XeLaTeX by default
-$pdf_mode = 5;
+# Use LuaLaTeX by default
+$pdf_mode = 4;
+# Enable shell escape
+$pdflatex = 'lualatex -shell-escape %O %S';
 # Enable synctex
 set_tex_cmds('-synctex=1 %O %S');
 # Clean up extra auxiliary files

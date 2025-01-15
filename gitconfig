@@ -5,21 +5,22 @@
     signingkey = 7AD94E9F61AF651EE7D699B43F1AB0279EA3843F
     name = Zhang Maiyun
 
+[core]
+    whitespace = trailing-space,space-before-tab
+    excludesfile = ~/.gitignore
+
 [help]
     autoCorrect = 10
-
-[commit]
-    gpgsign = true
 
 [rerere]
     enabled = true
     autoupdate = true
 
 [commit]
+    gpgsign = true
     # Show diff when preparing commit message
     verbose = true
     cleanup = scissors
-
 
 [alias]
     a = add
@@ -50,6 +51,7 @@
     sms = submodule sync
     smu = submodule update
     sw = switch
+    swap = "! git stash push -S && git add . && git stash pop"
     swc = switch --create
 
 [http "https://repo.or.cz"]
@@ -73,10 +75,6 @@
 [init]
     defaultBranch = main
 
-[core]
-    whitespace = trailing-space,space-before-tab
-    excludesfile = ~/.gitignore
-
 [apply]
     whitespace = fix
 
@@ -86,6 +84,9 @@
     smtpencryption = tls
     smtpserverport = 587
     annotate = yes
+
+[http]
+    lowSpeedLimit = 0
 
 # Include local overrides
 [include]
