@@ -25,10 +25,12 @@
 [alias]
     a = add
     aa = add --all
+    # https://stackoverflow.com/a/39487648/9347959
+    anw = "!git -c diff.noprefix=false diff -U0 -w --no-color -- \"$@\" | git apply --cached --ignore-whitespace --unidiff-zero #"
     b = branch
     c = commit --verbose
     cl = clone --recurse-submodules
-    cln = clean -xdf
+    cln = clean -xdi
     co = checkout
     cp = cherry-pick
     d = diff
@@ -91,3 +93,5 @@
 # Include local overrides
 [include]
     path = ~/.gitconfig.local
+[color]
+	ui = auto

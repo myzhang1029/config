@@ -3,10 +3,6 @@ VerifyHostKeyDNS ask
 Host *.git*.com
     ControlPersist 120s
 
-Host e.coding.net
-    ControlPersist 120s
-    IdentityFile ~/.ssh/id_rsa
-
 Host *
     ControlMaster auto
     ControlPath ~/.ssh/conn-%r@%h:%p
@@ -14,6 +10,5 @@ Host *
     Compression yes
     ServerAliveInterval 30
     ServerAliveCountMax 120
-    IdentityFile ~/.ssh/id_ed25519
 
 Include config.d/*.conf

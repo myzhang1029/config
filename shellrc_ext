@@ -16,7 +16,7 @@ done
 export EDITOR
 
 ## $PATH things
-export PATH="$HOME/.myprefix/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:/usr/lib/ccache/bin:$PATH"
+export PATH="$HOME/.myprefix/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
 
 ## Use vim line editing mode
 set -o vi
@@ -107,11 +107,11 @@ doh()
 commit_zap()
 (
     cd "$(brew --repository homebrew/cask)/Casks" || return 1
-    casks="$(git status -su | sed 's: M [a-zA-Z0-9]/\(.*\)\.rb:\1:' | xargs)"
+    cask_paths="$(git status -su | sed 's:^ M ::' | xargs)"
 
-    for cask in $casks
+    for caskpath in $cask_paths
     do
-        caskpath="${cask%${cask#?}}/${cask}.rb"
+        cask="$(basename "$caskpath" .rb)"
         echo "$cask" at "$caskpath"
         brew audit --cask --online "$cask" || echo "brew audit failed for $cask"
         brew style --fix "$cask" || echo "brew style failed for $cask"
@@ -186,8 +186,6 @@ then
 fi
 
 ## Python
-alias python='python3'
-alias pip='pip3'
 alias ipy='ipython'
 
 ## Homebrew
