@@ -44,6 +44,9 @@ Plug 'cespare/vim-toml'
 Plug 'keith/swift.vim'
 Plug 'arzg/vim-swift'
 
+" Safer modelines
+Plug 'ciaranm/securemodelines'
+
 " OpenCL
 Plug 'petRUShka/vim-opencl'
 

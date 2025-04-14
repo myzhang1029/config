@@ -1,3 +1,7 @@
+# By myself
+*.profraw
+*.profdata
+
 # VisualStudioCode.gitignore
 .vscode/*
 !.vscode/settings.json

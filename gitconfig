@@ -33,7 +33,9 @@
     cln = clean -xdi
     co = checkout
     cp = cherry-pick
+    cpx = cherry-pick -x
     d = diff
+    dc = diff --cached
     f = fetch
     gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main"
     l = pull
@@ -44,6 +46,10 @@
     pa = "!git remote | xargs -L1 -I % echo \"git push --all %; git push --tags %\" | sh"
     pf = push --force-with-lease --force-if-includes
     re = remote
+    rs = restore
+    rss = restore --staged
+    rssw = restore --staged --worktree
+    rsw = restore --worktree
     rv = remote -v
     st = status
     sta = stash
@@ -60,7 +66,7 @@
     sslCert = ~/.repo.or.cz.push.pem
 
 [pull]
-    rebase = false
+    rebase = true
 
 [push]
     autoSetupRemote = true
