@@ -251,7 +251,11 @@ then
     }
     compctl -K _pip_completion pip3
     # pip zsh completion end
-
+    # arduino-cli completion
+    if type arduino-cli > /dev/null 2>&1
+    then
+        eval $(arduino-cli completion zsh)
+    fi
 else
     # Not zsh
     # Use bash-completion, if available
@@ -297,5 +301,10 @@ else
     }
     complete -o default -F _pip_completion pip3
     # pip bash completion end
+    # arduino-cli completion
+    if type arduino-cli > /dev/null 2>&1
+    then
+        eval $(arduino-cli completion bash)
+    fi
 fi
 
