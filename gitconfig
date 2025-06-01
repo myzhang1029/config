@@ -62,20 +62,30 @@
     swap = "! git stash push -S && git add . && git stash pop"
     swc = switch --create
 
-[http "https://repo.or.cz"]
-    sslCert = ~/.repo.or.cz.push.pem
+[fetch]
+    parallel = 0
+    prune = true
+    pruneTags = true
 
 [pull]
     rebase = true
 
 [push]
     autoSetupRemote = true
+    followTags = true
+    gpgSign = if-asked
+
+[status]
+    showStash = true
 
 [filter "lfs"]
     required = true
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
+
+[gpg "ssh"]
+    allowedSignersFile = /Users/zmy/.config/git/allowed-signers
 
 [diff "json"]
     textconv = jq --sort-keys .
@@ -96,8 +106,11 @@
 [http]
     lowSpeedLimit = 0
 
+[color]
+    ui = auto
+
+[merge]
+
 # Include local overrides
 [include]
     path = ~/.gitconfig.local
-[color]
-	ui = auto
