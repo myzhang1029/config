@@ -18,8 +18,8 @@ attempt_install()
     return 1
 }
 
-attempt_install neovim
+attempt_install vim
 attempt_install python3
 attempt_install python3-pip
-attempt_install aria2
+attempt_install wget2
 attempt_install bash-completion
