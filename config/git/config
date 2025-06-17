@@ -61,6 +61,8 @@
     sw = switch
     swap = "! git stash push -S && git add . && git stash pop"
     swc = switch --create
+    t = tag
+    tv = tag --verify
 
 [fetch]
     parallel = 0

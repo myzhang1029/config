@@ -1,10 +1,13 @@
 set editor=vim
-set imap_user=admin
+set imap_user=`echo $MAIL_USER`
 set folder=imaps://mail.maiyun.me/
 set spoolfile=+INBOX
+set record=+Sent
+set edit_headers=yes
 set smtp_url=smtp://$imap_user@mail.maiyun.me/
 set ssl_force_tls=yes
 set ssl_starttls=yes
+set from=`echo $MAIL_USER@maiyun.me`
 
 set crypt_autosign=yes
 set crypt_replysign=yes
