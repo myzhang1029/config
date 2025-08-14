@@ -19,22 +19,7 @@ AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: false
 BinPackArguments: true
 BinPackParameters: true
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterClass:      true
-  AfterControlStatement: true
-  AfterEnum:       true
-  AfterFunction:   true
-  AfterNamespace:  false
-  AfterObjCDeclaration: false
-  AfterStruct:     true
-  AfterUnion:      true
-  BeforeCatch:     true
-  BeforeElse:      true
-  IndentBraces:    false
-  SplitEmptyFunction: true
-  SplitEmptyRecord: true
-  SplitEmptyNamespace: true
+BreakBeforeBraces: Attach
 BreakBeforeBinaryOperators: None
 BreakBeforeInheritanceComma: false
 BreakBeforeTernaryOperators: true
