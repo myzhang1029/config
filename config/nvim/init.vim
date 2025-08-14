@@ -11,7 +11,12 @@ set mouse=ncv
 set nu       " Show line number
 set ruler
 
-command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+" Try saving with sudo
+command Wsuper execute 'w !sudo tee % > /dev/null' <bar> edit!
+" Delete the current file https://stackoverflow.com/a/16679182
+command DelFile call delete(expand('%')) | bdelete!
+" Show edits
+command Diff execute 'w !git diff --no-index -- % -'
 
 " Don't mess up YAMLs
 autocmd FileType yaml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
@@ -60,9 +65,6 @@ Plug 'github/copilot.vim'
 Plug 'wakatime/vim-wakatime'
 
 call plug#end()
-
-" Shorter version
-command! Diff execute 'DiffChangesDiffToggle'
 
 " Mappings
 " Emacs-style Ctrl-A to cure muscle memory
