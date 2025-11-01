@@ -137,7 +137,7 @@ then
                 git commit -sm "$title" || return 1
                 git push myzhang1029 "$branch" || return 1
 
-                gh pr create --title "$title" --body-file - --base "homebrew:master" --head "myzhang1029:$branch" --web << 'EOF'
+                gh pr create --title "$title" --body-file - --base "homebrew:main" --head "myzhang1029:$branch" --web << 'EOF'
 After making any changes to a cask, existing or new, verify:
 
 - [x] The submission is for [a stable version](https://docs.brew.sh/Acceptable-Casks#stable-versions) \
