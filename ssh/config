@@ -1,4 +1,5 @@
 VerifyHostKeyDNS ask
+SendEnv -LC_CTYLE LANG LC_ALL
 
 Host *.git*.com
     ControlPersist 120s
