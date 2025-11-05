@@ -87,7 +87,7 @@
     process = git-lfs filter-process
 
 [gpg "ssh"]
-    allowedSignersFile = /Users/zmy/.config/git/allowed-signers
+    allowedSignersFile = ~/.config/git/allowed-signers
 
 [diff "json"]
     textconv = jq --sort-keys .
@@ -115,4 +115,4 @@
 
 # Include local overrides
 [include]
-    path = ~/.gitconfig.local
+    path = ~/.config/git/config.local
