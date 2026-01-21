@@ -1,6 +1,6 @@
 set editor=vim
 set pipe_decode=yes
-set my_pw=`sq decrypt ~/.config/mutt/$MAIL_USER.gpg`
+set my_pw=`gpg-sq --decrypt ~/.config/mutt/$MAIL_USER.gpg`
 set imap_user=`echo $MAIL_USER`
 set imap_pass=$my_pw
 set smtp_pass=$my_pw
@@ -12,9 +12,14 @@ set smtp_url=smtp://$imap_user@mail.maiyun.me/
 set ssl_force_tls=yes
 set ssl_starttls=yes
 set reverse_name=yes
+set envelope_from=yes
 set from=`echo $MAIL_USER@maiyun.me`
 set message_id_format = "<%Y%02m%02d%x%x%x%x%x%x@localnet.as211585.net>"
 alternates `cat ~/.config/mutt/$MAIL_USER.alts.txt`
+
+# Key binds
+bind index G imap-fetch-mail
+macro index,pager a "<save-message>=Archive<enter>" "Save message to Archive"
 
 # Sidebar
 set sidebar_visible = yes

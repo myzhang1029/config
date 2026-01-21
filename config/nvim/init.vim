@@ -5,11 +5,14 @@ set autoread " Reload on change externally
 set backspace=indent,eol,start " Enable backspace
 set encoding=utf8
 set hid
-set list " Highlight invisible characters
+set list         " Highlight invisible characters
 set listchars=tab:▸\ ,eol:¬
-set mouse=ncv
-set nu       " Show line number
-set ruler
+set mouse=ncv    " All except insert mode
+set nu           " Show line number
+set ruler        " Show bottom ruler
+set equalalways  " Equal split panels
+set incsearch    " Start searching immediately
+set hlsearch     " Highlight on search
 
 " Try saving with sudo
 command Wsuper execute 'w !sudo tee % > /dev/null' <bar> edit!
@@ -57,9 +60,6 @@ Plug 'petRUShka/vim-opencl'
 
 " ARM assembler
 Plug 'ARM9/arm-syntax-vim'
-
-" GitHub copilot
-Plug 'github/copilot.vim'
 
 " Code time
 Plug 'wakatime/vim-wakatime'

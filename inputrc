@@ -4,6 +4,7 @@ set completion-ignore-case on
 set editing-mode vi
 set match-hidden-files off
 set show-all-if-ambiguous on
+set colored-completion-prefix on
 
 # Bindings
 "\C-a":beginning-of-line
