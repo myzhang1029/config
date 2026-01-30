@@ -63,6 +63,10 @@
     swc = switch --create
     t = tag
     tv = tag --verify
+    wt = worktree
+    wta = worktree add
+    wtl = worktree list
+    wtr = worktree remove
 
 [fetch]
     parallel = 0
