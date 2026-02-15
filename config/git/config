@@ -37,7 +37,8 @@
     d = diff
     dc = diff --cached
     f = fetch
-    gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D main && git branch -m main"
+    fb = "!git fetch \"${1:-origin}\" \"refs/heads/${2:-main}:refs/remotes/${1:-origin}/${2:-main}\" #"
+    gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D \"${1:-main}\" && git branch -m \"${1:-main}\" #"
     l = pull
     lo = log
     lg = log --decorate --oneline --graph
