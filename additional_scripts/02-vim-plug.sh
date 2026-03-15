@@ -21,9 +21,9 @@ fi
 
 # Install for vim
 ## Download vim-plug
-mkdir -p ~/.vim/autoload
-[ -e ~/.vim/autoload/plug.vim ] && rm ~/.vim/autoload/plug.vim
-ln -s "${INSTALL_DEST}/plug.vim" ~/.vim/autoload/plug.vim
+mkdir -p ~/.config/vim/autoload
+[ -e ~/.config/vim/autoload/plug.vim ] && rm ~/.config/vim/autoload/plug.vim
+ln -s "${INSTALL_DEST}/plug.vim" ~/.config/vim/autoload/plug.vim
 
 # Make sure plugins are loaded
 type nvim > /dev/null 2>&1 && nvim -c ':PlugInstall | qall' > /dev/null < /dev/null
