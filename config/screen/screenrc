@@ -1,2 +1,5 @@
 defscrollback 32768
 startup_message off
+escape ^Bb
+#termcapinfo xterm* ti@:te@
+#terminfo xterm* ti=:te=

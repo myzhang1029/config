@@ -212,6 +212,9 @@ alias g="git"
 ## DNS
 alias resolve="dns-sd -G v4v6"
 
+## Linux
+alias saferun='systemd-run -p PrivateDevices=yes -p ReadWritePaths=$PWD -p PrivateTmp=yes -p ProtectSystem=strict -p CapabilityBoundingSet= -dt'
+
 ## macOS
 ### remove the "unsafe" notice of an app
 alias enableapp="sudo xattr -d com.apple.quarantine"
