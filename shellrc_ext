@@ -49,12 +49,20 @@ export GOPATH="$XDG_DATA_HOME"/go
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
 
 # Functions
-## Clear with clear delimeter
+## Flush the tty
 clear()
 {
     printf '%*s\n' 10000 '' | tr ' ' "#"
     printf '%*s\n' 10000 ''
     command clear
+}
+
+## Deep reset
+reset()
+{
+    stty sane
+    printf '\033c'
+    command reset
 }
 
 ## Find files in $1 larger than $2
