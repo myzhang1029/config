@@ -6,7 +6,9 @@ set backspace=indent,eol,start " Enable backspace
 set encoding=utf8
 set hid
 set list         " Highlight invisible characters
-set listchars=tab:▸\ ,eol:¬
+set listchars=lead:·,trail:·,tab:▸\ ,eol:¬
+highlight NonText ctermfg=gray guifg=gray
+highlight SpecialKey ctermfg=gray guifg=gray
 set mouse=ncv    " All except insert mode
 set nu           " Show line number
 set ruler        " Show bottom ruler
@@ -24,7 +26,7 @@ command Diff execute 'w !git diff --no-index -- % -'
 " Don't mess up YAMLs
 autocmd FileType yaml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 autocmd FileType yaml set indentkeys-=<:>
-" Use actual tab chars in Makefiles and TSV.
+" Use actual tab chars in Makefiles and TSV
 autocmd FileType make set noexpandtab
 autocmd BufEnter *.tsv set noexpandtab
 " For everything else, use a tab width of 4

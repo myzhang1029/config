@@ -1,9 +1,8 @@
 #!/bin/sh
 # Install vim-plug
 
-# Install for neovim
-INSTALL_DEST="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload
-
+# Install for vim
+INSTALL_DEST="${XDG_CONFIG_HOME:-$HOME/.config}"/vim/autoload
 mkdir -p "${INSTALL_DEST}"
 # First make sure at least the bundled version can be used as fallback
 cp "$(dirname "$0")"/plug.vim "${INSTALL_DEST}/plug.vim"
@@ -19,11 +18,11 @@ then
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
-# Install for vim
-## Download vim-plug
-mkdir -p ~/.config/vim/autoload
-[ -e ~/.config/vim/autoload/plug.vim ] && rm ~/.config/vim/autoload/plug.vim
-ln -s "${INSTALL_DEST}/plug.vim" ~/.config/vim/autoload/plug.vim
+# Install for neovim
+INSTALL_DEST2="${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload
+mkdir -p "${INSTALL_DEST2}"
+[ -e "${INSTALL_DEST2}/plug.vim" ] && rm "${INSTALL_DEST2}/plug.vim"
+ln -s "${INSTALL_DEST}/plug.vim" "${INSTALL_DEST2}/plug.vim"
 
 # Make sure plugins are loaded
 type nvim > /dev/null 2>&1 && nvim -c ':PlugInstall | qall' > /dev/null < /dev/null

@@ -38,7 +38,7 @@ do_link() {
     # Possible broken link
     if [ -e "$HOME/.$1" ] || [ -L "$HOME/.$1" ]
     then
-        # shellcheck disable=SC2088 # ~ is intended not to be expanded
+        # shellcheck disable=SC2088 # ~ intentionally not expanded
         echo "~/.$1 exists, overwrite? [y/n]"
         read -r tf
         if [ "$tf" = "y" ]
@@ -100,6 +100,11 @@ printf "$INSTALLED\n"
 
 for script in additional_scripts/*.sh
 do
-    echo "Running $script"
-    $script
+    echo "Run $script? [y/n]"
+    read -r tf
+    if [ "$tf" = "y" ]
+    then
+        echo "Running $script"
+        $script
+    fi
 done
