@@ -12,6 +12,7 @@ do
         break
     fi
 done
+
 [ "$TERM_PROGRAM" = "vscode" ] && EDITOR="code -w"
 export EDITOR
 
@@ -47,6 +48,10 @@ export XDG_STATE_HOME="${XDG_STATE_HOME-$HOME/.local/state}"
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GOPATH="$XDG_DATA_HOME"/go
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
+
+if [ -x "$(command -v vim)" ] && [ "$(vim --clean -es +'call setline(1,string(has("patch-9.1.0327"))) | %p | qa!')" -eq 0 ]; then
+    export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
+fi
 
 # Functions
 ## Flush the tty
