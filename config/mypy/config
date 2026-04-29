@@ -1,0 +1,5 @@
+[mypy]
+cache_dir = ~/.cache/mypy
+warn_return_any = True
+warn_unused_configs = True
+disallow_untyped_defs = True
