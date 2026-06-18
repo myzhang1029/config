@@ -44,7 +44,7 @@
     lg = log --decorate --oneline --graph
     m = merge
     p = push
-    pa = "!git remote | xargs -L1 -I % echo \"git push --all %; git push --tags %\" | sh"
+    pa = "!git remote | xargs -I % echo \"git push --all %; git push --tags %\" | sh"
     pf = push --force-with-lease --force-if-includes
     re = remote
     rs = restore
