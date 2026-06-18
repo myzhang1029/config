@@ -16,9 +16,6 @@ done
 [ "$TERM_PROGRAM" = "vscode" ] && EDITOR="code -w"
 export EDITOR
 
-## $PATH things
-export PATH="$HOME/.myprefix/bin:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
-
 ## Use vim line editing mode
 set -o vi
 if [ -n "$ZSH_VERSION" ]
@@ -45,13 +42,25 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME-$HOME/.local/state}"
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
-export GOPATH="$XDG_DATA_HOME"/go
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
 
 if [ -x "$(command -v vim)" ] && [ "$(vim --clean -es +'call setline(1,string(has("patch-9.1.0327"))) | %p | qa!')" -eq 0 ]; then
     export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 fi
+
+## Rust and Go
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export GOPATH="$XDG_DATA_HOME"/go
+export PATH="$CARGO_HOME/bin:$GOPATH/bin:$PATH"
+export RUSTC_WRAPPER="$CARGO_HOME/bin/sccache"
+export CMAKE_C_COMPILER_LAUNCHER="$CARGO_HOME/bin/sccache"
+export CMAKE_CXX_COMPILER_LAUNCHER="$CARGO_HOME/bin/sccache"
+export SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
+
+if [ -x "$(command -v ninja)" ]; then
+    export CMAKE_GENERATOR=Ninja
+fi
+
 
 # Functions
 ## Flush the tty
