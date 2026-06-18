@@ -41,32 +41,34 @@ augroup resCur
 augroup END
 
 " Plugins
-if has('nvim')
-    call plug#begin('~/.config/nvim/plugged')
-else
-    call plug#begin('~/.config/vim/plugged')
+if empty($VIM_NO_PLUG)
+    if has('nvim')
+        call plug#begin('~/.config/nvim/plugged')
+    else
+        call plug#begin('~/.config/vim/plugged')
+    endif
+
+    " TOML
+    Plug 'cespare/vim-toml'
+
+    " Swift
+    Plug 'keith/swift.vim'
+    Plug 'arzg/vim-swift'
+
+    " Safer modelines
+    Plug 'ciaranm/securemodelines'
+
+    " OpenCL
+    Plug 'petRUShka/vim-opencl'
+
+    " ARM assembler
+    Plug 'ARM9/arm-syntax-vim'
+
+    " Code time
+    Plug 'wakatime/vim-wakatime'
+
+    call plug#end()
 endif
-
-" TOML
-Plug 'cespare/vim-toml'
-
-" Swift
-Plug 'keith/swift.vim'
-Plug 'arzg/vim-swift'
-
-" Safer modelines
-Plug 'ciaranm/securemodelines'
-
-" OpenCL
-Plug 'petRUShka/vim-opencl'
-
-" ARM assembler
-Plug 'ARM9/arm-syntax-vim'
-
-" Code time
-Plug 'wakatime/vim-wakatime'
-
-call plug#end()
 
 " Mappings
 " Emacs-style Ctrl-A to cure muscle memory
