@@ -37,6 +37,8 @@ gpg-agent --daemon > /dev/null || true
 GPG_TTY="$(tty)"
 export GPG_TTY
 
+export PATH="$HOME/.local/bin:$PATH"
+
 ## XDG Things
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME-$HOME/.cache}"
