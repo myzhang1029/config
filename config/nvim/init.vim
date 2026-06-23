@@ -4,17 +4,19 @@ filetype plugin indent on
 set autoread " Reload on change externally
 set backspace=indent,eol,start " Enable backspace
 set encoding=utf8
-set hid
+set hidden       " Switch tabs without having to save
 set list         " Highlight invisible characters
 set listchars=lead:·,trail:·,tab:▸\ ,eol:¬
 highlight NonText ctermfg=gray guifg=gray
 highlight SpecialKey ctermfg=gray guifg=gray
 set mouse=ncv    " All except insert mode
-set nu           " Show line number
+set number       " Show line number
 set ruler        " Show bottom ruler
 set equalalways  " Equal split panels
 set incsearch    " Start searching immediately
 set hlsearch     " Highlight on search
+nnoremap <esc><esc> :silent! nohls<cr>
+set laststatus=2 " Always show the status bar
 
 " Try saving with sudo
 command Wsuper execute 'w !sudo tee % > /dev/null' <bar> edit!
@@ -32,7 +34,7 @@ autocmd BufEnter *.tsv set noexpandtab
 " For everything else, use a tab width of 4
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 " Line wrap in diff
-au VimEnter * if &diff | execute 'windo set wrap' | endif
+autocmd VimEnter * if &diff | execute 'windo set wrap' | endif
 
 " Remember file position
 augroup resCur
