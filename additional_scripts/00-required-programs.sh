@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# Attempt to install packages $1.
 attempt_install()
 {
     SUDO="$(command -v sudo > /dev/null 2>&1 && echo sudo || echo command)"
@@ -8,18 +7,14 @@ attempt_install()
     do
         if command -v "$prog" >/dev/null 2>&1
         then
-            "$SUDO" "$prog" -y install "$1" && return 0
+            "$SUDO" "$prog" install "$@" && return 0
         fi
     done
     if command -v pacman >/dev/null 2>&1
     then
-        yes | "$SUDO" pacman -S --needed "$1" && return 0
+        "$SUDO" pacman -S --needed "$@" && return 0
     fi
     return 1
 }
 
-attempt_install vim
-attempt_install python3
-attempt_install python3-pip
-attempt_install wget2
-attempt_install bash-completion
+attempt_install vim python3 bash-completion
