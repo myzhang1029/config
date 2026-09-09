@@ -14,7 +14,7 @@ else
         *) FULLPATH="$(pwd -P)/$BASE";;
     esac
 fi
-IGNORE="use.sh auto_install.sh README.md .gitignore backup additional_scripts"
+IGNORE="use.sh auto_install.sh make_gitignore.sh README.md .gitignore backup additional_scripts"
 INSTALLED=""
 
 cd "$BASE" || exit 1

@@ -1,14 +1,14 @@
 set editor=vim
-set pipe_decode=yes
+# set pipe_decode=yes
 set my_pw=`sq decrypt ~/.config/mutt/$MAIL_USER.gpg`
 set imap_user=`echo $MAIL_USER`
 set imap_pass=$my_pw
 set smtp_pass=$my_pw
-set folder=imaps://mail.maiyun.me/
+set folder=imaps://`echo $MAIL_SERVER`/
 set spoolfile=+INBOX
 set record=+Sent
 set edit_headers=yes
-set smtp_url=smtp://$imap_user@mail.maiyun.me/
+set smtp_url=smtp://$imap_user@`echo $MAIL_SERVER`:587/
 set ssl_force_tls=yes
 set ssl_starttls=yes
 set reverse_name=yes
@@ -33,6 +33,7 @@ bind index,pager <Esc>d sidebar-page-down
 mailboxes -label "Inbox" "+INBOX"
 mailboxes -label "Archive" "+Archive"
 mailboxes -label "Sent" "+Sent"
+mailboxes -label "Trash" "+Trash"
 
 # PGP Stuff
 set crypt_autosign=yes

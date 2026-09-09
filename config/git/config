@@ -7,7 +7,7 @@
 
 [core]
     whitespace = trailing-space,space-before-tab
-    excludesfile = ~/.gitignore
+    excludesfile = ~/.config/git/ignore
 
 [help]
     autoCorrect = 10
@@ -40,6 +40,7 @@
     fb = "!git fetch \"${1:-origin}\" \"refs/heads/${2:-main}:refs/remotes/${1:-origin}/${2:-main}\" #"
     gh = "!git checkout --orphan \"_temporary${RANDOM}_branch\" && git commit -a && git branch -D \"${1:-main}\" && git branch -m \"${1:-main}\" #"
     l = pull
+    lpr = "!gh pr checkout $1 && git switch -"
     lo = log
     lg = log --decorate --oneline --graph
     m = merge

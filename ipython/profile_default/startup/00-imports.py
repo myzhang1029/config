@@ -1,8 +1,11 @@
+import importlib
+import ipaddress
 import json
 import os
 import sys
-from importlib import import_module as _import
+from ipaddress import ip_address, ip_network
 from math import *
+from pathlib import Path
 
 def dsin(x):
     """Return the sine of x (measured in degrees)."""
@@ -36,15 +39,15 @@ def datan(d):
 
 optional_imports = [
     ("np", "numpy"),
+    ("sns", "seaborn"),
     ("pd", "pandas"),
     ("plt", "matplotlib.pyplot"),
-    ("tf", "tensorflow")
+    ("tf", "tensorflow"),
+    ("torch", "torch"),
 ]
 
 for name, module in optional_imports:
     try:
-        setattr(__builtins__, name, _import(module))
+        setattr(__builtins__, name, importlib.import_module(module))
     except ImportError:
         pass
-
-del _import
