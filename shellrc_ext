@@ -388,9 +388,10 @@ then
         for dir in "${TRASH_PATHS[@]}"
         do
             (
+                [ -n "$ZSH_VERSION" ] && setopt no_nomatch
                 [ -d "$dir" ] || continue
                 cd "$dir" || continue
-                for pth in "$PWD"/*
+                for pth in "$PWD"/* "$PWD"/.*
                 do
                     echo "trash \"$pth\"" | command grep -i "$1"
                 done
