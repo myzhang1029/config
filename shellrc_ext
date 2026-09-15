@@ -106,17 +106,6 @@ newmac()
     sudo /sbin/ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//')"
 }
 
-## Zap any app with brew-createzap
-zapper()
-{
-    echo "trash $(
-        brew createzap "$1" | sed 's/^zap trash: \[$//;
-        s/^\]$//;
-        s/,$//;
-        s,^ *"~/,"'"$HOME"'/,'|awk -v ORS=' ' 1
-    )"
-}
-
 ## Update autoconf aux
 autoconf_aux()
 {
@@ -352,4 +341,61 @@ else
     then
         eval "$(arduino-cli completion bash)"
     fi
+fi
+
+if [ -n "$ZSH_VERSION" ] || [ -n "$BASH_VERSION" ]
+then
+    ## Zap any app, based on brew-createzap
+    zapper()
+    {
+        local TRASH_PATHS
+        # shellcheck disable=SC3030
+        TRASH_PATHS=(
+          "$HOME/Desktop"
+          "$HOME/Documents"
+          "$HOME/Library"
+          "$HOME/Library/Application Scripts"
+          "$HOME/Library/Application Support"
+          "$HOME/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments"
+          "$HOME/Library/Caches"
+          "$HOME/Library/Caches/com.apple.helpd/Generated"
+          "$HOME/Library/Caches/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile"
+          "$HOME/Library/Containers"
+          "$HOME/Library/Cookies"
+          "$HOME/Library/Group Containers"
+          "$HOME/Library/HTTPStorages"
+          "$HOME/Library/Internet Plug-Ins"
+          "$HOME/Library/LaunchAgents"
+          "$HOME/Library/Logs"
+          "$HOME/Library/PreferencePanes"
+          "$HOME/Library/Preferences"
+          "$HOME/Library/Saved Application State"
+          "$HOME/Library/WebKit"
+          "$HOME/Music"
+          "/Library/Application Support"
+          "/Library/Caches"
+          "/Library/LaunchDaemons"
+          "/Library/PreferencePanes"
+          "/Library/Preferences"
+          "/Library/PrivilegedHelperTools"
+          "/Library/Screen Savers"
+          "/Library/ScriptingAdditions"
+          "/Library/Services"
+          "/Users/Shared"
+          "/etc/newsyslog.d"
+        )
+        # shellcheck disable=SC3054
+        for dir in "${TRASH_PATHS[@]}"
+        do
+            (
+                [ -d "$dir" ] || continue
+                cd "$dir" || continue
+                for pth in "$PWD"/*
+                do
+                    echo "trash \"$pth\"" | command grep -i "$1"
+                done
+            )
+        done
+        command find ~ -maxdepth 1 | command grep -i "$1" | command sed 's/^/trash "/;s/$/"/'
+    }
 fi
