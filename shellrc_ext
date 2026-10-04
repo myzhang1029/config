@@ -106,6 +106,12 @@ newmac()
     sudo /sbin/ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//')"
 }
 
+## Rotate pages in a pdf
+rotpdf()
+{
+    gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="$3" -dAutoRotatePages=/None -c "<</Orientation $2>> setpagedevice" -f "$1"
+}
+
 ## Update autoconf aux
 autoconf_aux()
 {

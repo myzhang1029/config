@@ -1,19 +1,19 @@
 VerifyHostKeyDNS ask
-SendEnv -LC_CTYLE LANG LC_ALL
+SendEnv -LC_CTYPE LANG LC_ALL
+GSSAPIAuthentication yes
+PreferredAuthentications gssapi-with-mic,gssapi-keyex,publickey,password,keyboard-interactive
+ControlMaster auto
+ControlPath ~/.ssh/conn-%r@%h:%p
+ControlPersist 4h
+Compression yes
+ServerAliveInterval 30
+ServerAliveCountMax 120
+MACs hmac-sha2-256,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
+KexAlgorithms diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256,curve25519-sha256,curve25519-sha256@libssh.org,sntrup761x25519-sha512@openssh.com
+HostKeyAlgorithms ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,ssh-rsa
+Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
+
+Include config.d/*.conf
 
 Host *.git*.com
     ControlPersist 120s
-
-Host *
-    ControlMaster auto
-    ControlPath ~/.ssh/conn-%r@%h:%p
-    ControlPersist 4h
-    Compression yes
-    ServerAliveInterval 30
-    ServerAliveCountMax 120
-    MACs hmac-sha2-256,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,umac-128-etm@openssh.com
-    KexAlgorithms diffie-hellman-group14-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256,curve25519-sha256,curve25519-sha256@libssh.org,sntrup761x25519-sha512@openssh.com
-    HostKeyAlgorithms ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,ssh-rsa
-    Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com,chacha20-poly1305@openssh.com
-
-Include config.d/*.conf

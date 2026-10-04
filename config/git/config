@@ -6,6 +6,7 @@
     name = Zhang Maiyun
 
 [core]
+    autocrlf = input
     whitespace = trailing-space,space-before-tab
     excludesfile = ~/.config/git/ignore
 
