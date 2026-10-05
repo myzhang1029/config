@@ -4,8 +4,7 @@ ADMIN_USER="${ADMIN_USER-$USER}"
 export PAGER="less"
 
 ## Select an editor and set $EDITOR
-for editor in vim nvim nano vi emacs
-do
+for editor in vim nvim nano vi emacs; do
     if type "$editor" >/dev/null 2>&1
     then
         EDITOR="$editor"
@@ -18,8 +17,7 @@ export EDITOR
 
 ## Use vim line editing mode
 set -o vi
-if [ -n "$ZSH_VERSION" ]
-then
+if [ -n "$ZSH_VERSION" ]; then
     bindkey "^A" beginning-of-line
     bindkey "^E" end-of-line
 # else set in .inputrc
@@ -34,7 +32,8 @@ fi
 if [ -n "$WANT_GPG_TTY_SETUP" ]; then
     gpg-agent --daemon > /dev/null || true
     # Fix gpg signing issue if ran as a subprocess
-    export GPG_TTY="$(tty)"
+    GPG_TTY="$(tty)"
+    export GPG_TTY
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
@@ -67,74 +66,62 @@ fi
 
 # Functions
 ## Flush the tty
-clear()
-{
+clear() {
     printf '%*s\n' 10000 '' | tr ' ' "#"
     printf '%*s\n' 10000 ''
     command clear
 }
 
 ## Deep reset
-reset()
-{
+reset() {
     stty sane
     printf '\033c'
     command reset
 }
 
 ## Find files in $1 larger than $2
-findlarger()
-{
+findlarger() {
     sudo find "$1" -xdev -type f -size "+$2"
 }
 
 ## Find files in $1 that are largest $2
-findlargest()
-{
+findlargest() {
     sudo "du" -ahx "$1" 2>/dev/null | sort -rh | head "-$2"
 }
 
 ## Do something until it succeeds
-tryagain()
-{
+tryagain() {
     while ! "$@"; do :; done
 }
 
 ## Get a new MAC address for WiFi (macOS)
-newmac()
-{
+newmac() {
     sudo /sbin/ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//')"
 }
 
 ## Rotate pages in a pdf
-rotpdf()
-{
+rotpdf() {
     gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="$3" -dAutoRotatePages=/None -c "<</Orientation $2>> setpagedevice" -f "$1"
 }
 
 ## Update autoconf aux
-autoconf_aux()
-{
+autoconf_aux() {
     command wget -O- 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD' > config.guess
     command wget -O- 'https://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD' > config.sub
 }
 
 ## DNS over HTTPS resolver
-doh()
-{
+doh() {
     curl -H "Accept: application/dns-json" "https://dns.nextdns.io/dohtest?name=$1&type=${2:-A}" | jq '.Answer'
 }
 
-if [ -n "$BASH_VERSION" ]
-then
+if [ -n "$BASH_VERSION" ]; then
     ## Commit Homebrew cask zap updates: does not work with zsh
-    commit_zap()
-    (
+    commit_zap() (
         cd "$(brew --repository homebrew/cask)/Casks" || return 1
         cask_paths="$(git status -su | sed 's:^ M ::' | xargs)"
 
-        for caskpath in $cask_paths
-        do
+        for caskpath in $cask_paths; do
             cask="$(basename "$caskpath" .rb)"
             echo "$cask" at "$caskpath"
             brew audit --cask --online "$cask" || echo "brew audit failed for $cask"
@@ -142,8 +129,7 @@ then
             brew cleanup --prune all
             echo "Press enter to create the commit, or 's' to skip... "
             read -r
-            if ! [ "v$REPLY" = "vs" ]
-            then
+            if ! [ "v$REPLY" = "vs" ]; then
                 title="$cask: update zap stanza"
                 branch="zap-$cask"
                 git switch -c "$branch" || return 1
@@ -169,8 +155,7 @@ EOF
         done
     )
 else
-    commit_zap()
-    {
+    commit_zap() {
         echo "Use bash" >&2
         exit 1
     }
@@ -181,8 +166,7 @@ fi
 ### Listing
 #### List commands overriding ohmyz
 #### status: 0: GNU ls; 1: BSD ls
-if ls --help >/dev/null 2>&1
-then
+if ls --help >/dev/null 2>&1; then
     # GNU ls
     alias ls='ls --color'
     alias la='ls -A'
@@ -208,15 +192,13 @@ alias rwget="command wget -cbrxp -nH -np --execute robots=off -U 'Mozilla/5.0 (M
 #### Search command history
 alias ghis='history|grep'
 #### Copy with progress
-if type rsync >/dev/null 2>&1
-then
+if type rsync >/dev/null 2>&1; then
     alias pcp="rsync -arP"
 else
     alias pcp="cp -r"
 fi
 #### Use aria2c instead of wget
-if type aria2c >/dev/null 2>&1
-then
+if type aria2c >/dev/null 2>&1; then
     alias wget="aria2c -x16"
 fi
 
@@ -249,15 +231,13 @@ alias fflistdev="ffmpeg -hide_banner -f avfoundation -list_devices true -i ''"
 [ -f ~/.local_aliases ] && . ~/.local_aliases
 
 
-if [ -n "$ZSH_VERSION" ]
-then
+if [ -n "$ZSH_VERSION" ]; then
     # Session history
     alias lochist="fc -lLI 1"
     # Reset terminal options
     precmd() { tput sgr0; printf "\x0f"; }
     # Zsh -s aliases
-    if type unar >/dev/null 2>&1
-    then
+    if type unar >/dev/null 2>&1; then
         alias -s gz="unar"
         alias -s tgz="unar"
         alias -s tar="unar"
@@ -276,8 +256,7 @@ then
     fi
 
     # pip zsh completion start
-    _pip_completion()
-    {
+    _pip_completion() {
         # shellcheck disable=SC3043
         local words cword
         read -Ac words
@@ -290,33 +269,27 @@ then
     compctl -K _pip_completion pip3
     # pip zsh completion end
     # arduino-cli completion
-    if type arduino-cli > /dev/null 2>&1
-    then
+    if type arduino-cli > /dev/null 2>&1; then
         eval "$(arduino-cli completion zsh)"
     fi
 else
     # Not zsh
     # Use bash-completion, if available
-    if [ -f /usr/share/bash-completion/bash_completion ]
-    then
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
             . /usr/share/bash-completion/bash_completion
     fi
     # fall back to suggesting all files if there are none matching the sought extensions
     COMP_FILEDIR_FALLBACK=1
     BASH_COMPLETION_FILEDIR_FALLBACK=1
-    if [ "$PS1" ]
-    then
+    if [ "$PS1" ]; then
         # oh-my-zsh robbyrussell theme-like prompt
-        __bash_prompt_git()
-        {
+        __bash_prompt_git() {
            GIT_OPTIONAL_LOCKS=0 command git "$@"
         }
 
-        __bash_git_prompt_info()
-        {
+        __bash_git_prompt_info() {
             if ! __bash_prompt_git rev-parse --git-dir > /dev/null 2>&1 || \
-                [ "$(__bash_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" = "1" ]
-            then
+                [ "$(__bash_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" = "1" ]; then
                 return 0
             fi
             # shellcheck disable=SC3043
@@ -333,8 +306,7 @@ else
     fi
 
     # pip bash completion start
-    _pip_completion()
-    {
+    _pip_completion() {
         # shellcheck disable=SC3054,SC3030
         COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
                        COMP_CWORD=$COMP_CWORD \
@@ -343,17 +315,14 @@ else
     complete -o default -F _pip_completion pip3
     # pip bash completion end
     # arduino-cli completion
-    if type arduino-cli > /dev/null 2>&1
-    then
+    if type arduino-cli > /dev/null 2>&1; then
         eval "$(arduino-cli completion bash)"
     fi
 fi
 
-if [ -n "$ZSH_VERSION" ] || [ -n "$BASH_VERSION" ]
-then
+if [ -n "$ZSH_VERSION" ] || [ -n "$BASH_VERSION" ]; then
     ## Zap any app, based on brew-createzap
-    zapper()
-    {
+    zapper() {
         local TRASH_PATHS
         # shellcheck disable=SC3030
         TRASH_PATHS=(
@@ -391,14 +360,12 @@ then
           "/etc/newsyslog.d"
         )
         # shellcheck disable=SC3054
-        for dir in "${TRASH_PATHS[@]}"
-        do
+        for dir in "${TRASH_PATHS[@]}"; do
             (
                 [ -n "$ZSH_VERSION" ] && setopt no_nomatch
-                [ -d "$dir" ] || continue
-                cd "$dir" || continue
-                for pth in "$PWD"/* "$PWD"/.*
-                do
+                [ -d "$dir" ] || return 0
+                cd "$dir" || return 1
+                for pth in "$PWD"/* "$PWD"/.*; do
                     echo "trash \"$pth\"" | command grep -i "$1"
                 done
             )
