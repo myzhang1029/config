@@ -31,11 +31,11 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="${HOME}/.gnupg/S.gpg-agent.ssh"
 
 fi
-gpg-agent --daemon > /dev/null || true
-
-# Fix gpg signing issue if ran as a subprocess
-GPG_TTY="$(tty)"
-export GPG_TTY
+if [ -n "$WANT_GPG_TTY_SETUP" ]; then
+    gpg-agent --daemon > /dev/null || true
+    # Fix gpg signing issue if ran as a subprocess
+    export GPG_TTY="$(tty)"
+fi
 
 export PATH="$HOME/.local/bin:$PATH"
 
