@@ -9,7 +9,7 @@ set list         " Highlight invisible characters
 set listchars=lead:·,trail:·,tab:▸\ ,eol:¬
 highlight NonText ctermfg=gray guifg=gray
 highlight SpecialKey ctermfg=gray guifg=gray
-set mouse=ncv    " All except insert mode
+set mouse=nv     " Only allow mouse in normal and visual modes (not insert or command)
 set number       " Show line number
 set ruler        " Show bottom ruler
 set equalalways  " Equal split panels
