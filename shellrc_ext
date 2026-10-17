@@ -138,16 +138,31 @@ if [ -n "$BASH_VERSION" ]; then
                 git push myzhang1029 "$branch" || return 1
 
                 gh pr create --title "$title" --body-file - --base "homebrew:main" --head "myzhang1029:$branch" --web << 'EOF'
+-----
+
 After making any changes to a cask, existing or new, verify:
 
-- [x] The submission is for [a stable version](https://docs.brew.sh/Acceptable-Casks#stable-versions) \
-or [documented exception](https://docs.brew.sh/Acceptable-Casks#but-there-is-no-stable-version).
+- [x] The submission is for [a stable version](https://docs.brew.sh/Acceptable-Casks#stable-versions) or [documented exception](https://docs.brew.sh/Acceptable-Casks#but-there-is-no-stable-version).
 - [x] `brew audit --cask --online <cask>` is error-free.
 - [x] `brew style --fix <cask>` reports no offenses.
 
-_Disclaimer: This PR is semi-automatically created deterministically (i.e. not AI).
-The checks above were automatically executed.
-A human always gets to click the final button. Please shout at me if my tool is misbehaving._
+Additionally, if adding a new cask (Not applicable):
+
+- [ ] Named the cask according to the [token reference](https://docs.brew.sh/Cask-Cookbook#token-reference).
+- [ ] Checked the cask was not [already refused](https://github.com/search?q=repo%3AHomebrew%2Fhomebrew-cask+is%3Aclosed+is%3Aunmerged+&type=pullrequests) (add your cask's name to the end of the search field).
+- [ ] `brew audit --cask --new <cask>` worked successfully.
+- [ ] `HOMEBREW_NO_INSTALL_FROM_API=1 brew install --cask <cask>` worked successfully.
+- [ ] `brew uninstall --cask <cask>` worked successfully.
+
+-----
+
+- [x] I did not use AI/LLM to create this PR, or I disclosed the tool/model below and reviewed its output, including [`zap` stanza](https://docs.brew.sh/Cask-Cookbook#stanza-zap) paths; I did not attribute commits to AI and will answer maintainer questions and review comments myself without AI/LLM.
+
+This PR is semi-automatically created deterministically (i.e. not LLM).
+The checks above were automatically executed but I (homo sapiens) manually confirms every PR.
+Please shout at me if [my tool](https://github.com/myzhang1029/config/blob/main/shellrc_ext#commit_zap) is misbehaving.
+
+-----
 EOF
                 # Go to the previous commit
                 git switch -
