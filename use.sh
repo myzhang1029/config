@@ -16,15 +16,48 @@ else
 fi
 IGNORE="use.sh auto_install.sh make_gitignore.sh README.md .gitignore backup additional_scripts"
 INSTALLED=""
+yes=n
+force=n
 
 cd "$BASE" || exit 1
 
+while [ -n "$1" ]; do
+    case "$1" in
+        # Link without backup
+        -f)
+            force=y
+           ;;
+        # Answer yes to all questions
+        -y)
+            yes=y
+           ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            echo "Unknown option: $1"
+            exit 2
+            ;;
+        *)
+            set_node_name "$1"
+            ;;
+    esac
+    shift
+done
+
 # Back up a file with structure.
 # @param 1 name or path of the file to back up.
-backup_one() {
-    echo "Moving ~/.$1 to backup/$1"
-    mkdir -p "$OLDWORKDIR/backup/$(dirname "$1")"
-    mv "$HOME/.$1" "$OLDWORKDIR/backup/$1"
+backup_or_rm_one() {
+    if [ "$force" = y ]
+    then
+        echo "Deleting ~/.$1"
+        rm -f "$HOME/.$1"
+    else
+        echo "Moving ~/.$1 to backup/$1"
+        mkdir -p "$OLDWORKDIR/backup/$(dirname "$1")"
+        mv "$HOME/.$1" "$OLDWORKDIR/backup/$1"
+    fi
 }
 
 # Link a file to $HOME.
@@ -40,10 +73,15 @@ do_link() {
     then
         # shellcheck disable=SC2088 # ~ intentionally not expanded
         echo "~/.$1 exists, overwrite? [y/n]"
-        read -r tf
-        if [ "$tf" = "y" ]
+        if [ "$yes" = y ]
         then
-            backup_one "$1"
+            tf=y
+        else
+            read -r tf
+        fi
+        if [ "$tf" = y ]
+        then
+            backup_or_rm_one "$1"
         else
             echo "Not overwriting"
             return
