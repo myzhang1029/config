@@ -43,7 +43,7 @@ augroup resCur
 augroup END
 
 " Plugins
-if empty($VIM_NO_PLUG)
+if !empty($WANT_VIM_PLUG)
     if has('nvim')
         call plug#begin('~/.config/nvim/plugged')
     else
