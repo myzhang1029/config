@@ -1,17 +1,18 @@
 #!/bin/sh
-# Variables
-ADMIN_USER="${ADMIN_USER-$USER}"
-export PAGER="less"
 
+__is_a_command() {
+    [ -x "$(command -v "$1")" ] || type "$1" > /dev/null 2>&1
+}
+
+# Preferred programs
+export PAGER="less"
 ## Select an editor and set $EDITOR
 for editor in vim nvim nano vi emacs; do
-    if type "$editor" >/dev/null 2>&1
-    then
+    if __is_a_command "$editor"; then
         EDITOR="$editor"
         break
     fi
 done
-
 [ "$TERM_PROGRAM" = "vscode" ] && EDITOR="code -w"
 export EDITOR
 
@@ -36,33 +37,38 @@ if [ -n "$WANT_GPG_TTY_SETUP" ]; then
     export GPG_TTY
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
-
 ## XDG Things
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME-$HOME/.config}"
 export XDG_CACHE_HOME="${XDG_CACHE_HOME-$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME-$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME-$HOME/.local/state}"
-export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
-export W3M_DIR="$XDG_DATA_HOME"/w3m
 
-if [ -x "$(command -v vim)" ] && [ "$(vim --clean -es +'call setline(1,string(has("patch-9.1.0327"))) | %p | qa!')" -eq 0 ]; then
+export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export GOPATH="$XDG_DATA_HOME"/go
+export W3M_DIR="$XDG_DATA_HOME"/w3m
+export RUFF_CACHE_DIR="$XDG_CACHE_HOME/ruff"
+export SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
+
+if __is_a_command vim && [ "$(vim --clean -es +'call setline(1,string(has("patch-9.1.0327"))) | %p | qa!')" -eq 0 ]; then
     export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 fi
 
-## Rust and Go
-export CARGO_HOME="$XDG_DATA_HOME"/cargo
-export GOPATH="$XDG_DATA_HOME"/go
-export PATH="$CARGO_HOME/bin:$GOPATH/bin:$PATH"
-export RUSTC_WRAPPER="$CARGO_HOME/bin/sccache"
-export CMAKE_C_COMPILER_LAUNCHER="$CARGO_HOME/bin/sccache"
-export CMAKE_CXX_COMPILER_LAUNCHER="$CARGO_HOME/bin/sccache"
-export SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
-
-if [ -x "$(command -v ninja)" ]; then
+if __is_a_command ninja; then
     export CMAKE_GENERATOR=Ninja
 fi
 
+export PATH="$HOME/.local/bin:$PATH"
+
+# Rust and Go
+export PATH="$CARGO_HOME/bin:$GOPATH/bin:$PATH"
+__sccache_location="$CARGO_HOME/bin/sccache"
+if [ -f "$__sccache_location" ]; then
+    export RUSTC_WRAPPER="$__sccache_location"
+    export CMAKE_C_COMPILER_LAUNCHER="$__sccache_location"
+    export CMAKE_CXX_COMPILER_LAUNCHER="$__sccache_location"
+fi
+unset __sccache_location
 
 # Functions
 ## Flush the tty
@@ -92,11 +98,6 @@ findlargest() {
 ## Do something until it succeeds
 tryagain() {
     while ! "$@"; do :; done
-}
-
-## Get a new MAC address for WiFi (macOS)
-newmac() {
-    sudo /sbin/ifconfig en0 ether "$(openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/:$//')"
 }
 
 ## Rotate pages in a pdf
@@ -177,10 +178,7 @@ else
 fi
 
 # Aliases
-## General aliases
-### Listing
-#### List commands overriding ohmyz
-#### status: 0: GNU ls; 1: BSD ls
+## coreutils aliases
 if ls --help >/dev/null 2>&1; then
     # GNU ls
     alias ls='ls --color'
@@ -194,44 +192,29 @@ else
     alias ll="ls -Glh"
     alias l="ls -GlAh"
 fi
-
-### Other coreutils
 alias du='du -Ph'
 alias df='df -h'
-#### Do something as the admin
-alias suy='sudo "-EHu${ADMIN_USER}"'
-#### Shredded revoval
-alias srm="shred -fuvxzn100"
+
 #### Recursive download
 alias rwget="command wget -cbrxp -nH -np --execute robots=off -U 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15'"
 #### Search command history
 alias ghis='history|grep'
 #### Copy with progress
-if type rsync >/dev/null 2>&1; then
+if __is_a_command rsync; then
     alias pcp="rsync -arP"
 else
     alias pcp="cp -r"
 fi
 #### Use aria2c instead of wget
-if type aria2c >/dev/null 2>&1; then
+if __is_a_command aria2c; then
     alias wget="aria2c -x16"
 fi
 
 ## Python
 alias ipy='ipython'
 
-## Homebrew
-alias brew='sudo "-EHu${ADMIN_USER}" brew'
-### install
-alias binst='sudo "-EHu${ADMIN_USER}" brew install'
-### uninstall
-alias bunins='sudo "-EHu${ADMIN_USER}" brew uninstall'
-
 ## Git plugin
 alias g="git"
-
-## DNS
-alias resolve="dns-sd -G v4v6"
 
 ## Linux
 alias saferun='systemd-run -p PrivateDevices=yes -p ReadWritePaths=$PWD -p PrivateTmp=yes -p ProtectSystem=strict -p CapabilityBoundingSet= -dt'
@@ -239,7 +222,10 @@ alias saferun='systemd-run -p PrivateDevices=yes -p ReadWritePaths=$PWD -p Priva
 ## macOS
 ### remove the "unsafe" notice of an app
 alias enableapp="sudo xattr -d com.apple.quarantine"
+### List devices visible to ffmpeg
 alias fflistdev="ffmpeg -hide_banner -f avfoundation -list_devices true -i ''"
+### DNS
+alias resolve="dns-sd -G v4v6"
 
 ## Load other system-local aliases
 # shellcheck source=/dev/null
@@ -251,24 +237,6 @@ if [ -n "$ZSH_VERSION" ]; then
     alias lochist="fc -lLI 1"
     # Reset terminal options
     precmd() { tput sgr0; printf "\x0f"; }
-    # Zsh -s aliases
-    if type unar >/dev/null 2>&1; then
-        alias -s gz="unar"
-        alias -s tgz="unar"
-        alias -s tar="unar"
-        alias -s xz="unar"
-        alias -s bz2="unar"
-        alias -s Z="unar"
-        alias -s zip="unar"
-    else
-        alias -s gz="gunzip"
-        alias -s tgz="tar -zxvf"
-        alias -s tar="tar -xvf"
-        alias -s xz="unxz"
-        alias -s bz2="bunzip2"
-        alias -s Z="uncompress"
-        alias -s zip="unzip"
-    fi
 
     # pip zsh completion start
     _pip_completion() {
@@ -284,7 +252,7 @@ if [ -n "$ZSH_VERSION" ]; then
     compctl -K _pip_completion pip3
     # pip zsh completion end
     # arduino-cli completion
-    if type arduino-cli > /dev/null 2>&1; then
+    if __is_a_command arduino-cli; then
         eval "$(arduino-cli completion zsh)"
     fi
 else
@@ -330,7 +298,7 @@ else
     complete -o default -F _pip_completion pip3
     # pip bash completion end
     # arduino-cli completion
-    if type arduino-cli > /dev/null 2>&1; then
+    if __is_a_command arduino-cli; then
         eval "$(arduino-cli completion bash)"
     fi
 fi
